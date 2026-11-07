@@ -89,6 +89,8 @@ def run_sealed(fn):
         if abs(la["debt"] - lb["debt"]) > 0.01:
             failed.append({"id": "twin-same-inputs", "family": "twin", "rule": "1068-G7A",
                            "detail": f"one answer (${a['debt']:.2f}) for two lawful debts (${la['debt']:.2f} vs ${lb['debt']:.2f})"})
+    order = {"twin": 0, "attribution": 1, "life": 2, "boundary": 3}
+    failed.sort(key=lambda f: order.get(f["family"], 9))
     return {"hash": s["hash"], "sealed_at": s["sealed_at"], "n_tests": s["n_tests"], "failed": failed}
 
 

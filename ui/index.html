@@ -1,0 +1,870 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ONUS — Merge Gate</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ONUS — built on the Assay Office design system (Satoshi, olive greys, butter, square geometry, matte LEDs, one signal colour) */
+:root{
+  --font-sans: "Satoshi", "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  --ease-step: cubic-bezier(.23,1,.32,1);
+  --dur-step: .24s;
+  --gutter: 16px;
+  --paper:#F4F2E8; --paper-ink:#1A1A16; --paper-line:#CFCCBD;
+}
+:root, :root[data-theme="dark"]{
+  --bg:#000; --bg-2:#0E0E0C; --panel:#1C1D19; --panel-2:#24251F; --panel-3:#3A3B34;
+  --line:#3A3B34; --line-2:#55564C;
+  --ink:#F0F1E9; --ink-2:#B4B5AA; --ink-3:#85867B;
+  --butter:#FBFFC9; --butter-ink:#11110E;
+  --amber:#E8B04B; --signal:#F26522; --on-signal:#11110E; --frost:#9DB4C6;
+  --bar:#B4B5AA; --onb: color-mix(in oklab, #FBFFC9 13%, transparent);
+  color-scheme: dark;
+}
+:root[data-theme="light"]{
+  --bg:#F0F1E9; --bg-2:#E8E9DF; --panel:#E2E3D8; --panel-2:#D8D9CD; --panel-3:#C2C3B6;
+  --line:#C9CABD; --line-2:#9C9D90;
+  --ink:#11110E; --ink-2:#45463F; --ink-3:#6B6C62;
+  --butter:#2B3300; --butter-ink:#F6F9CF;
+  --amber:#9A5F00; --signal:#D9480F; --on-signal:#11110E; --frost:#3B5A6E;
+  --bar:#45463F; --onb: color-mix(in oklab, #C9D24A 30%, transparent);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme]){
+    --bg:#F0F1E9; --bg-2:#E8E9DF; --panel:#E2E3D8; --panel-2:#D8D9CD; --panel-3:#C2C3B6; --line:#C9CABD; --line-2:#9C9D90;
+    --ink:#11110E; --ink-2:#45463F; --ink-3:#6B6C62; --butter:#2B3300; --butter-ink:#F6F9CF;
+    --amber:#9A5F00; --signal:#D9480F; --on-signal:#11110E; --frost:#3B5A6E; --bar:#45463F; --onb: color-mix(in oklab, #C9D24A 30%, transparent); color-scheme: light;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+html[data-stage] body{zoom:1.18}
+body{background:var(--bg); color:var(--ink); font-family:var(--font-sans); font-size:16px; line-height:1.5;
+  -webkit-font-smoothing:antialiased; transition: background-color .35s var(--ease-step), color .35s var(--ease-step)}
+::selection{background:var(--butter); color:var(--butter-ink)}
+.mono{font-family:var(--font-mono)}
+.num{font-variant-numeric:tabular-nums}
+.label{font-family:var(--font-mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3)}
+.wrap{max-width:1320px; margin:0 auto; padding:0 var(--gutter)}
+main.press{animation:press .08s steps(1)}
+@keyframes press{0%{transform:translateY(2px)} 100%{transform:none}}
+
+/* Top bar */
+.bar{position:sticky; top:0; z-index:20; background:var(--bg); border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex; align-items:center; gap:20px; height:60px}
+.brand{display:flex; align-items:center; gap:10px; font-weight:500; font-size:22px; letter-spacing:-.03em}
+.brand svg{width:22px; height:22px}
+.brand small{font-family:var(--font-mono); font-size:11px; letter-spacing:.12em; color:var(--ink-3); text-transform:uppercase; font-weight:400}
+.leds{display:flex; gap:16px; margin-left:auto; align-items:center}
+.led{display:flex; align-items:center; gap:8px}
+.led i{width:6px; height:6px; display:block; background:var(--panel-3)}
+.led i.on{background:var(--butter)}
+.led i.err{background:var(--signal)}
+.tbtn{all:unset; cursor:pointer; padding:8px 11px; font-family:var(--font-mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-2); border:1px solid var(--line-2)}
+.tbtn[aria-pressed="true"]{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+.tbtn:focus-visible{outline:2px solid var(--butter); outline-offset:2px}
+.seg{display:inline-flex; flex-wrap:wrap}
+.seg .tbtn + .tbtn{border-left:0}
+
+/* Buttons */
+.btn{all:unset; box-sizing:border-box; cursor:pointer; display:inline-flex; align-items:center; gap:10px; padding:13px 20px;
+  font-size:17px; font-weight:500; letter-spacing:-.01em; border:1px solid var(--line-2); color:var(--ink); transition: background .2s}
+.btn:hover{background:var(--panel)}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--butter); color:var(--butter-ink); border-color:transparent}
+.btn.primary:hover{background:var(--butter); filter:brightness(.96)}
+.btn.sm{padding:9px 13px; font-size:14px}
+.btn svg{width:16px; height:16px}
+.btn:focus-visible{outline:2px solid var(--butter); outline-offset:2px}
+.btn[disabled]{opacity:.5; cursor:progress}
+
+/* Hero */
+.hero{padding:44px 0 30px}
+.hero-grid{display:grid; grid-template-columns: .9fr 1.1fr; gap:44px; align-items:start}
+h1{font-weight:400; font-size:clamp(44px, 5.6vw, 72px); line-height:1; letter-spacing:-.055em; margin:16px 0 18px; max-width:12ch}
+.lede{color:var(--ink-2); font-size:19px; line-height:1.45; max-width:36ch; margin:0 0 24px}
+.cta{display:flex; gap:12px; flex-wrap:wrap}
+.term{margin-top:20px; border:1px solid var(--line-2); background:var(--panel); font-family:var(--font-mono); font-size:13px}
+.term .chrome{display:flex; gap:5px; padding:9px 12px; border-bottom:1px solid var(--line); align-items:center}
+.term .chrome i{width:8px; height:8px; background:var(--panel-3); display:block}
+.term .chrome span{margin-left:10px; color:var(--ink-3); font-size:12px}
+.term .log{height:236px; overflow:hidden; padding:10px 14px; display:flex; flex-direction:column; justify-content:flex-end}
+.term .ln{white-space:pre; overflow:hidden; text-overflow:ellipsis; animation: stepin var(--dur-step) var(--ease-step)}
+.term .ln .k{color:var(--ink-3)} .term .ln .ok{color:var(--butter)} .term .ln .bad{color:var(--signal)} .term .ln .inf{color:var(--amber)} .term .ln .abs{color:var(--frost)}
+:root[data-theme="light"] .term .ln .ok{color:#56620A}
+.cursor{display:inline-block; width:.6em; height:1.05em; vertical-align:-2px; background:var(--ink); animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+@keyframes stepin{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+
+/* Income canvas (chamfered tray) */
+.tray{position:relative; padding:18px 20px 16px; border:1px solid var(--line-2); border-radius:3px;
+  clip-path: polygon(0 0, calc(100% - 26px) 0, 100% 26px, 100% 100%, 0 100%)}
+.chamfer{position:absolute; right:-1px; top:-1px; width:27px; height:27px; pointer-events:none}
+.tray-head{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:4px}
+.tray-head .hint{font-size:14px; color:var(--ink-2)}
+.readout{font-family:var(--font-mono); font-size:13px; color:var(--ink-2); text-align:right; min-height:20px; white-space:nowrap}
+.cv{display:grid; grid-template-columns: 44px 1fr; column-gap:6px; margin-top:10px}
+.yax{position:relative; height:230px; margin-top:36px}
+.yax span{position:absolute; right:2px; transform:translateY(-50%); font-family:var(--font-mono); font-size:11px; color:var(--ink-3)}
+.plot{position:relative; height:266px; padding-top:36px}
+.grid-l{position:absolute; left:0; right:0; height:0; border-top:1px solid var(--line); pointer-events:none}
+.bars{position:relative; height:230px; display:grid; grid-template-columns:repeat(26,1fr); gap:3px; touch-action:none; cursor:ns-resize; user-select:none}
+.col{position:relative; height:100%; outline:none}
+.col.onb{background:var(--onb)}
+.col:focus-visible{outline:2px solid var(--butter); outline-offset:1px}
+.col .fill{position:absolute; left:0; right:0; bottom:0; background:var(--bar); transition:height .12s linear, background .3s}
+.col.hot .fill{background:var(--ink)}
+.col .cap{position:absolute; left:0; right:0; height:2px; background:var(--ink); transform:translateY(1px); opacity:0}
+.col:hover .cap, .col.hot .cap{opacity:1}
+.avg{position:absolute; left:0; right:0; height:0; border-top:2px dashed var(--ink-3); pointer-events:none; transition:top .2s var(--ease-step), border-color .3s}
+.avg span{position:absolute; right:0; bottom:4px; font-family:var(--font-mono); font-size:11.5px; color:var(--ink-3); background:var(--bg); padding:1px 5px; white-space:nowrap}
+.avg.hot{border-top-color:var(--signal)} .avg.hot span{color:var(--signal)}
+.figure{position:absolute; width:22px; height:30px; color:var(--ink); pointer-events:none; transition:left .25s var(--ease-step), bottom .25s var(--ease-step)}
+.togs{display:grid; grid-template-columns:repeat(26,1fr); gap:3px; margin-top:6px}
+.tog{all:unset; cursor:pointer; aspect-ratio:1; max-height:16px; width:100%; box-shadow: inset 0 0 0 1px var(--line-2); justify-self:center}
+.tog[aria-pressed="true"]{background:var(--butter); box-shadow:none}
+.tog:focus-visible{outline:2px solid var(--butter); outline-offset:1px}
+.fnl{display:grid; grid-template-columns:repeat(26,1fr); gap:3px; margin-top:3px; font-family:var(--font-mono); font-size:10.5px; color:var(--ink-3); text-align:center}
+.ctrls{display:grid; gap:10px; margin-top:14px}
+.ctrl-row{display:flex; gap:10px 14px; flex-wrap:wrap; align-items:center}
+.ctrl-row .label{min-width:70px}
+.chipbtn{all:unset; cursor:pointer; padding:7px 10px; border:1px solid var(--line-2); font-family:var(--font-mono); font-size:12.5px; color:var(--ink-2)}
+.chipbtn:hover{color:var(--ink); border-color:var(--ink-2)}
+.chipbtn.on, .chipbtn[aria-pressed="true"]{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+.chipbtn:focus-visible{outline:2px solid var(--butter); outline-offset:2px}
+.total{margin-left:auto; text-align:right}
+.total b{display:block; font-size:30px; font-weight:400; letter-spacing:-.04em; line-height:1; font-variant-numeric:tabular-nums}
+.legend{display:flex; gap:14px; flex-wrap:wrap; font-size:13px; color:var(--ink-2)}
+.legend i{display:inline-block; width:11px; height:11px; vertical-align:-1px; margin-right:6px}
+
+/* Verdict band */
+.band{display:grid; grid-template-columns: auto 1fr; gap:44px; align-items:end; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  padding:22px 0 18px 22px; position:relative; margin-top:8px; transition:opacity .2s}
+.band::before{content:""; position:absolute; left:0; top:-1px; bottom:-1px; width:3px; background:var(--butter)}
+.band.k-bad::before{background:var(--signal)} .band.k-abs::before{background:var(--frost)}
+.band.pending{opacity:.6}
+.band .count{font-size:104px; font-weight:400; letter-spacing:-.05em; line-height:.9; font-variant-numeric:tabular-nums; white-space:nowrap}
+.band .count.bad{color:var(--signal)}
+.band .count small{font-size:34px; color:var(--ink-3); letter-spacing:-.03em}
+.band .verdict{font-size:clamp(38px,5.4vw,76px); font-weight:400; letter-spacing:-.06em; line-height:.95; overflow:hidden; white-space:nowrap; text-overflow:clip}
+.v-bad{color:var(--signal)} .v-ok{color:var(--ink)} .v-abs{color:var(--frost)}
+.band .meta{margin-top:10px}
+
+/* Console */
+.console{display:grid; grid-template-columns: 1fr 1.3fr 1.05fr; border:1px solid var(--line); margin:28px 0 18px; align-items:stretch}
+.pane{border-right:1px solid var(--line); min-width:0; display:flex; flex-direction:column}
+.pane:last-child{border-right:0}
+.pane-h{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:13px 16px; border-bottom:1px solid var(--line); background:var(--bg-2)}
+.pane-h h3{margin:0; font-size:19px; font-weight:500; letter-spacing:-.02em}
+.pane-h .label{text-align:right}
+.pane-b{padding:12px 16px 16px; flex:1}
+.sub-h{margin:18px 0 8px; display:flex; justify-content:space-between; gap:10px; align-items:baseline}
+
+.rule{display:grid; grid-template-columns: 18px 1fr; gap:10px; align-items:start; padding:12px 0 12px 8px; border-bottom:1px solid var(--line); position:relative}
+.rule:last-child{border-bottom:0}
+.rule .ic svg{width:15px; height:15px; margin-top:5px}
+.rule .rid{font-family:var(--font-mono); font-size:13.5px; font-weight:500; color:var(--ink)}
+.rule .q{font-size:14.5px; color:var(--ink-2); margin-top:3px; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden}
+.rule .chips{display:flex; gap:6px; flex-wrap:wrap; margin-top:7px; align-items:center}
+.rule.touched::before{content:""; position:absolute; left:0; top:8px; bottom:8px; width:3px; background:var(--signal)}
+.rule.flash{animation:flash 1.3s var(--ease-step)}
+@keyframes flash{0%{background:color-mix(in oklab, var(--signal) 34%, transparent)} 100%{background:transparent}}
+.chip{font-family:var(--font-mono); font-size:11.5px; letter-spacing:.06em; padding:2px 7px; border:1px solid var(--line-2); color:var(--ink-2); white-space:nowrap; display:inline-block}
+.chip.ok{border-color:transparent; background:var(--butter); color:var(--butter-ink)}
+.chip.inf{border-color:var(--amber); color:var(--amber)}
+.chip.bad{border-color:transparent; background:var(--signal); color:var(--on-signal)}
+.chip.abs{border-color:var(--frost); color:var(--frost)}
+.chip.lg{font-size:13px; padding:4px 9px}
+.cite{display:inline-block; font-family:var(--font-mono); font-size:12px; color:var(--ink-3)}
+.muted{color:var(--ink-3)}
+.empty{font-family:var(--font-mono); font-size:13px; color:var(--ink-3); padding:10px 0}
+
+/* The letter: paper is paper in both themes */
+.letters{display:grid; grid-template-columns: 1.45fr 1fr; gap:12px; align-items:stretch}
+.notice{position:relative; background:var(--paper); color:var(--paper-ink); padding:16px 16px 18px; overflow:hidden; border:1px solid var(--paper-line); min-height:250px}
+.notice .wm{font-family:var(--font-mono); font-size:10px; letter-spacing:.16em; color:#8B8878; text-transform:uppercase; display:flex; justify-content:space-between}
+.notice h4{font-family:var(--font-serif); font-weight:400; font-size:34px; line-height:1; margin:10px 0 10px; letter-spacing:-.01em}
+.notice .body{font-family:var(--font-mono); font-size:12.5px; line-height:1.55}
+.notice .amt{font-family:var(--font-mono); font-size:24px; font-weight:700; margin:8px 0; font-variant-numeric:tabular-nums}
+.notice.void{opacity:.55}
+.stamp{position:absolute; left:50%; top:54%; transform:translate(-50%,-50%) rotate(-17deg); border:4px solid var(--signal); color:var(--signal);
+  font-family:var(--font-mono); font-weight:700; font-size:21px; letter-spacing:.08em; padding:8px 12px; white-space:nowrap; opacity:0; pointer-events:none; background:color-mix(in oklab, var(--paper) 65%, transparent)}
+.stamp.frost{border-color:#3B5A6E; color:#3B5A6E} .stamp.ok{border-color:#56620A; color:#56620A}
+.stamp.on{animation:stampin .14s steps(2) forwards}
+@keyframes stampin{0%{opacity:1; transform:translate(-50%,-50%) rotate(-17deg) scale(1.35)} 100%{opacity:.92; transform:translate(-50%,-50%) rotate(-17deg) scale(1)}}
+.lawful{border:1px solid var(--line-2); padding:14px; display:flex; flex-direction:column; gap:6px; background:var(--panel)}
+.lawful .big{font-size:44px; font-weight:400; letter-spacing:-.05em; line-height:1; font-variant-numeric:tabular-nums}
+.lawful .pr-big{font-size:26px; letter-spacing:-.04em; line-height:1; font-variant-numeric:tabular-nums}
+.twin{border:1px solid var(--line); margin-top:12px; padding:12px 14px; display:grid; grid-template-columns: 160px 1fr; gap:14px; align-items:center}
+.twin svg{width:100%; height:54px; display:block}
+.twin p{margin:0; font-size:15px; line-height:1.4}
+.twin p b{font-weight:500}
+.snap{margin-top:12px; border:1px solid var(--line); padding:12px 14px; background:var(--bg-2)}
+.snap .row{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:8px}
+.snap .kv{font-family:var(--font-mono); font-size:13px; color:var(--ink-2)}
+.snap .kv b{color:var(--ink); font-weight:500}
+.post{display:grid; gap:6px; margin-top:10px}
+.post .r{display:grid; grid-template-columns: 130px 1fr 44px; gap:10px; align-items:center; font-family:var(--font-mono); font-size:12.5px}
+.post .track{height:9px; background:var(--panel-2); position:relative; overflow:hidden}
+.post .fill{position:absolute; inset:0 auto 0 0; background:var(--ink-3); transition: width .6s var(--ease-step)}
+.post .r.win .fill{background:var(--butter)}
+.post .pv{color:var(--ink-2); text-align:right}
+.snap-proof{display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-top:10px; padding-top:8px; border-top:1px solid var(--line)}
+.snap-proof .ms{font-size:34px; letter-spacing:-.04em; line-height:1; font-variant-numeric:tabular-nums}
+
+/* Certificate pane */
+.receipt{font-family:var(--font-mono); font-size:12.5px; color:var(--ink-2); padding:4px 0 12px; border-bottom:1px solid var(--line); line-height:1.6}
+.receipt b{color:var(--ink); font-weight:500}
+.fails{margin-top:6px; display:grid; gap:4px}
+.fails div{display:grid; grid-template-columns:auto minmax(0,1fr); gap:8px; align-items:start; font-size:12px}
+.fails div span:last-child{color:var(--ink-3); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.rt{width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:12.5px; table-layout:fixed}
+.rt th{font-weight:400; color:var(--ink-3); text-align:left; padding:6px 4px; border-bottom:1px solid var(--line); font-size:11px; letter-spacing:.1em; text-transform:uppercase}
+.rt td{padding:7px 4px; border-bottom:1px solid var(--line); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.rt-sum{font-size:16px; margin:10px 0 2px; letter-spacing:-.01em}
+.rt-sum b{font-weight:500}
+.cert{display:grid; grid-template-columns: 1fr 78px; gap:12px; border:1px solid var(--line-2); padding:16px; background:var(--panel); margin-top:10px}
+.cert h4{margin:2px 0 6px; font-family:var(--font-serif); font-weight:400; font-size:30px; letter-spacing:-.01em; font-style:italic; line-height:1.05}
+.cert p{margin:6px 0; font-size:14px; color:var(--ink-2)}
+.cert .hash{font-family:var(--font-mono); font-size:12px; color:var(--ink-3); word-break:break-all; grid-column:1 / -1; min-height:3em}
+.seal{width:78px; height:78px; opacity:0; color:var(--ink)}
+.seal.stamped{animation: stamp .12s steps(2) forwards}
+@keyframes stamp{0%{opacity:1; transform:scale(1.3)} 100%{opacity:1; transform:scale(1)}}
+.testimony{display:flex; gap:8px; margin-top:8px}
+.testimony input{flex:1; min-width:0; background:var(--panel); border:1px solid var(--line-2); color:var(--ink); padding:11px 12px; font:inherit; font-size:15px; border-radius:0}
+.testimony input:focus{outline:2px solid var(--butter); outline-offset:-2px}
+.examples{display:flex; gap:6px; flex-wrap:wrap; margin-top:8px}
+.answer{margin-top:10px; font-size:14px; min-height:24px}
+.answer blockquote{margin:8px 0 0; padding:8px 10px; border-left:2px solid var(--line-2); font-family:var(--font-serif); font-size:18px; line-height:1.3; color:var(--ink)}
+.ico{fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:square; stroke-linejoin:miter}
+footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3); font-size:14px}
+.spin{display:inline-block; width:8px; height:8px; background:var(--ink-3); animation:blink .6s steps(1) infinite; vertical-align:0; margin-right:6px}
+
+@media (max-width: 1100px){
+  .hero-grid{grid-template-columns:1fr; gap:28px}
+  .console{grid-template-columns:1fr} .pane{border-right:0; border-bottom:1px solid var(--line)}
+  .band{grid-template-columns:1fr; gap:8px} .band .count{font-size:72px}
+}
+@media (max-width: 640px){
+  .leds .led .label{display:none}
+  .letters{grid-template-columns:1fr} .twin{grid-template-columns:1fr}
+  .cv{grid-template-columns:32px 1fr}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="logo" viewBox="0 0 24 24">
+      <path d="M2 2h9v9H2z" fill="currentColor"/>
+      <path d="M13 11V2a9 9 0 0 1 9 9z" fill="currentColor"/>
+      <path d="M2 13h9a9 9 0 0 1-9 9z" fill="currentColor"/>
+      <rect class="logo-live" x="13" y="13" width="9" height="9" fill="var(--butter)"/>
+    </symbol>
+    <symbol id="i-observed" viewBox="0 0 16 16"><rect x="2.5" y="2.5" width="11" height="11" fill="currentColor"/></symbol>
+    <symbol id="i-inferred" viewBox="0 0 16 16"><path class="ico" d="M2.5 13.5V2.5a11 11 0 0 1 11 11z"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 16 16"><path class="ico" d="M2 8h11M9 4l4 4-4 4"/></symbol>
+    <symbol id="i-stage" viewBox="0 0 16 16"><rect class="ico" x="1.5" y="2.5" width="13" height="9"/><path class="ico" d="M5 14.5h6M8 11.5v3"/></symbol>
+    <symbol id="i-probe" viewBox="0 0 16 16"><path class="ico" d="M8 1v4M8 11v4M1 8h4M11 8h4"/><rect x="6.5" y="6.5" width="3" height="3" fill="currentColor"/></symbol>
+    <symbol id="figure" viewBox="0 0 22 30">
+      <circle cx="9" cy="4" r="3" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M9 7v11M9 18l-4 9M9 18l4 9M9 11l-5 3M9 11l6-2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/>
+      <path d="M15 9l4 9" stroke="currentColor" stroke-width="1.4"/>
+      <rect x="17.5" y="17" width="3.4" height="4.4" fill="var(--paper)" stroke="currentColor" stroke-width=".7"/>
+    </symbol>
+    <symbol id="hallmark" viewBox="0 0 100 100">
+      <rect x="5" y="5" width="90" height="90" fill="none" stroke="currentColor" stroke-width="4"/>
+      <rect x="13" y="13" width="74" height="74" fill="none" stroke="currentColor" stroke-width="1.2"/>
+      <path d="M28 26h20v20H28z" fill="currentColor"/>
+      <path d="M52 46V26a20 20 0 0 1 20 20z" fill="currentColor"/>
+      <path d="M28 50h20a20 20 0 0 1-20 20z" fill="currentColor"/>
+      <rect x="52" y="50" width="20" height="20" fill="none" stroke="currentColor" stroke-width="4"/>
+      <text x="50" y="84" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7.5" letter-spacing="1.4" fill="currentColor">ONUS 2026</text>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="bar">
+  <div class="wrap">
+    <div class="brand"><svg aria-hidden="true"><use href="#logo"/></svg><span>ONUS</span><small>merge gate for law-code</small></div>
+    <div class="leds" aria-label="Model status">
+      <span class="led" title="SubQ Snap: decisions"><i data-led="snap"></i><span class="label">SubQ Snap</span></span>
+      <span class="led" title="Muse Spark: reads the Act"><i data-led="muse"></i><span class="label">Muse Spark</span></span>
+      <span class="led" title="Gemini: red team"><i data-led="gemini"></i><span class="label">Gemini</span></span>
+    </div>
+    <button class="tbtn" id="stageBtn" aria-pressed="false" title="Stage mode (S)"><svg width="12" height="12" style="vertical-align:-1px"><use href="#i-stage"/></svg> Stage</button>
+    <div class="seg" role="group" aria-label="Theme">
+      <button class="tbtn" data-theme-set="light" aria-pressed="false">Ledger</button>
+      <button class="tbtn" data-theme-set="dark" aria-pressed="true">Night</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <section class="hero">
+    <div class="hero-grid">
+      <div>
+        <div class="label" id="actMeta">Social Security Act 1991 · vol. 3 · 828 pages · read by Muse Spark</div>
+        <h1>CI was green. The law wasn’t.</h1>
+        <p class="lede">ONUS reads the statute, seals its tests before any AI writes a line, and blocks code that would send a letter the law doesn’t allow.</p>
+        <div class="cta">
+          <button class="btn primary" id="runBtn">Run the gate <svg><use href="#i-arrow"/></svg></button>
+          <button class="btn" id="rtBtn"><svg><use href="#i-probe"/></svg> Red-team</button>
+        </div>
+        <div class="term" role="log" aria-label="Run log">
+          <div class="chrome"><i></i><i></i><i></i><span>~/benefits-engine · onus</span></div>
+          <div class="log" id="log"><div class="ln"><span class="k">$</span> <span class="cursor"></span></div></div>
+        </div>
+      </div>
+
+      <div class="tray" aria-label="Income canvas: one bar per fortnight">
+        <svg class="chamfer" viewBox="0 0 27 27" aria-hidden="true"><line x1="0" y1="0.5" x2="26.5" y2="27" stroke="var(--line-2)" stroke-width="1" shape-rendering="crispEdges"/></svg>
+        <div class="tray-head">
+          <div><div class="label">Income canvas · one year · 26 fortnights</div><div class="hint">Drag the bars to draw what a person earned. Square under a bar = on benefit that fortnight.</div></div>
+          <div class="readout"><span id="ro"></span><br><span id="pendingLbl"></span></div>
+        </div>
+        <div class="cv">
+          <div class="yax" id="yax"></div>
+          <div>
+            <div class="plot" id="plot">
+              <div class="bars" id="bars" role="group" aria-label="Earned income per fortnight, $0 to $2,000"></div>
+            </div>
+            <div class="togs" id="togs" role="group" aria-label="On benefit per fortnight"></div>
+            <div class="fnl" id="fnl"></div>
+          </div>
+        </div>
+        <div class="ctrls">
+          <div class="ctrl-row">
+            <span class="label">Person</span>
+            <button class="chipbtn" data-preset="sara">Sara — worked half the year</button>
+            <button class="chipbtn" data-preset="even">Even earner</button>
+            <button class="chipbtn" data-preset="casual">Casual</button>
+          </div>
+          <div class="ctrl-row">
+            <span class="label">PR</span>
+            <div class="seg" role="group" aria-label="Pull request under review">
+              <button class="tbtn" data-pr="averaging">averaging</button>
+              <button class="tbtn" data-pr="free_area">free_area</button>
+              <button class="tbtn" data-pr="cliff">cliff</button>
+              <button class="tbtn" data-pr="legacy">legacy</button>
+            </div>
+            <button class="chipbtn" id="payBtn" aria-pressed="false">Payslips available: no</button>
+            <div class="total"><span class="label">ATO annual income</span><b id="annual">$0</b></div>
+          </div>
+          <div class="legend"><span><i style="background:var(--bar)"></i>earned that fortnight</span><span><i style="background:var(--butter)"></i>on benefit</span><span><i style="border-top:2px dashed var(--ink-3);height:0;width:16px"></i>annual ÷ 26 (what averaging assumes)</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="band" aria-live="polite" aria-atomic="true">
+    <div><div class="count" id="bandCount">—</div><div class="label meta" id="bandCountMeta">letter the PR would send</div></div>
+    <div><div class="verdict" id="bandVerdict"><span class="v-ok">Waiting for a run</span><span class="cursor" style="margin-left:.12em;height:.8em;vertical-align:0"></span></div><div class="label meta" id="bandMeta">SubQ Snap · decision layer</div></div>
+  </section>
+
+  <section class="console" aria-label="ONUS console">
+    <div class="pane" data-section="act">
+      <div class="pane-h"><h3>The Act</h3><span class="label" id="museMeta">Muse Spark · cited rules</span></div>
+      <div class="pane-b" id="rules"><div class="empty">loading rules…</div></div>
+    </div>
+
+    <div class="pane" data-section="letter">
+      <div class="pane-h"><h3>The letter</h3><span class="label">synthetic person · real statute</span></div>
+      <div class="pane-b">
+        <div class="letters">
+          <div class="notice void" id="notice">
+            <div class="wm"><span>Synthetic · not a real notice</span><span id="noticeRef">ref —</span></div>
+            <h4>Notice of debt</h4>
+            <div class="body" id="noticeBody">No run yet.</div>
+            <div class="stamp" id="stamp">WOULD HAVE BEEN SENT</div>
+          </div>
+          <div class="lawful" id="lawful">
+            <span class="label">The PR says</span><span class="pr-big" id="prAmt">—</span>
+            <span class="label" style="margin-top:10px">The Act says</span><span class="big" id="lawAmt">—</span>
+            <span class="cite" id="lawCite"></span>
+          </div>
+        </div>
+        <div class="twin" id="twin">
+          <div><div class="label" style="margin-bottom:4px">The twin</div><svg id="twinSvg" viewBox="0 0 260 54" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+          <p id="twinText" class="muted">The twin appears after a run.</p>
+        </div>
+        <div class="snap" id="snap" data-section="snap">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span class="label">SubQ Snap · one request</span><span id="snapRoute"></span></div>
+          <div id="snapBody" class="empty">waiting for a run</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pane" data-section="cert">
+      <div class="pane-h"><h3>Certificate</h3><span class="label">in-toto · sealed suite</span></div>
+      <div class="pane-b">
+        <div class="receipt" id="sealed">Sealed suite: <span class="muted">waiting for a run</span></div>
+        <div class="sub-h"><span class="label">Red team · Gemini, rules only</span><button class="btn sm" id="rtBtn2">Run red team</button></div>
+        <div id="redteam"><div class="empty">Gemini wrote deliberate misreadings of the Act. Press Red-team to run them through repo CI and through ONUS.</div></div>
+        <div class="cert" id="cert">
+          <div>
+            <div class="label">Certificate of gate</div>
+            <h4 id="certTitle">Not yet issued</h4>
+            <p id="certText">Run the gate, then issue a signed statement of what ONUS saw.</p>
+            <p class="mono" style="font-size:12px">Muse: the Act · Gemini: rules only, never the code · Judge: SubQ Snap</p>
+          </div>
+          <svg class="seal" id="seal" viewBox="0 0 100 100" aria-hidden="true"><use href="#hallmark"/></svg>
+          <div class="hash" id="hash">sha256 —</div>
+        </div>
+        <div style="margin-top:10px"><button class="btn sm" id="certBtn">Issue certificate</button></div>
+        <div class="label" style="margin-top:18px">Testimony · ask the Act</div>
+        <form class="testimony" id="testimony">
+          <input id="claimIn" placeholder="The free area is $100 a fortnight" aria-label="Claim about the Act">
+          <button class="btn sm" type="submit">Ask</button>
+        </form>
+        <div class="examples">
+          <button class="chipbtn" data-claim="The free area is $100 a fortnight">free area $100</button>
+          <button class="chipbtn" data-claim="Annual income can be averaged evenly across 26 fortnights">averaging is lawful</button>
+          <button class="chipbtn" data-claim="The taper above the free area is 60% on every dollar">60% on every dollar</button>
+        </div>
+        <div class="answer" id="answer" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>The statute is real (CC BY 4.0, legislation.gov.au). People and red-team PRs are synthetic. Not legal advice.</footer>
+</main>
+
+<script>
+(() => {
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => [...document.querySelectorAll(s)];
+  const root = document.documentElement;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const API = location.protocol.startsWith('http') ? '' : 'http://127.0.0.1:8787';
+  const N = 26, MAX = 2000, STEP = 50;
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const norm = (id) => String(id || '').toLowerCase().replace(/^s(?=\d)/, '').replace(/[^a-z0-9]/g, '');
+  const money2 = (v) => '$' + Number(v || 0).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const money = (v) => { v = Number(v || 0); return '$' + v.toLocaleString('en-AU', Number.isInteger(Math.round(v * 100) / 100) ? { maximumFractionDigits: 0 } : { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
+  const pct = (p) => (p == null ? '—' : Number(p).toFixed(2).replace(/^0/, ''));
+
+  /* ---------- theme + stage ---------- */
+  const setTheme = (t) => { root.setAttribute('data-theme', t); $$('[data-theme-set]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeSet === t))); try { localStorage.setItem('onus-theme', t) } catch (e) {} };
+  let saved = null; try { saved = localStorage.getItem('onus-theme') } catch (e) {}
+  setTheme(saved || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'));
+  $$('[data-theme-set]').forEach(b => b.addEventListener('click', () => setTheme(b.dataset.themeSet)));
+  const setStage = (on) => { on ? root.setAttribute('data-stage', '') : root.removeAttribute('data-stage'); $('#stageBtn').setAttribute('aria-pressed', String(on)); };
+  $('#stageBtn').addEventListener('click', () => setStage(!root.hasAttribute('data-stage')));
+  addEventListener('keydown', (e) => { if (e.key && e.key.toLowerCase() === 's' && !e.metaKey && !e.ctrlKey && !/input|textarea/i.test(e.target.tagName)) setStage(!root.hasAttribute('data-stage')); });
+
+  /* ---------- one clock: LEDs + logo tile ---------- */
+  const busy = { snap: 0, muse: 0, gemini: 0 }, errUntil = { snap: 0, muse: 0, gemini: 0 };
+  const setBusy = (k, d) => { busy[k] = Math.max(0, busy[k] + d); };
+  const ledErr = (k) => { errUntil[k] = performance.now() + 4000; };
+  const leds = $$('[data-led]');
+  const t0 = performance.now();
+  (function frame(now) {
+    const slow = ((now - t0) / 2400) % 1, fast = ((now - t0) / 500) % 1;
+    leds.forEach(l => {
+      const k = l.dataset.led, err = now < errUntil[k];
+      l.classList.toggle('err', err);
+      l.classList.toggle('on', !err && (reduce || !busy[k] || fast < .5));
+    });
+    $$('.logo-live').forEach(r => r.setAttribute('opacity', reduce || slow < .5 ? 1 : .35));
+    requestAnimationFrame(frame);
+  })(t0);
+
+  /* ---------- run log ---------- */
+  const log = $('#log');
+  function logLine(html) {
+    const d = document.createElement('div'); d.className = 'ln'; d.innerHTML = html;
+    const cur = log.lastElementChild; if (cur && cur.querySelector('.cursor')) log.insertBefore(d, cur); else log.appendChild(d);
+    while (log.children.length > 12) log.firstElementChild.remove();
+  }
+  const logErr = (where, e) => logLine(`<span class="bad">error</span> ${esc(where)} · ${esc(e && e.message || e)}`);
+  let typing = false;
+  function typeCommand(cmd) {
+    if (typing || reduce) { logLine(`<span class="k">$</span> ${esc(cmd)}`); return Promise.resolve(); }
+    typing = true;
+    return new Promise(res => {
+      const prompt = log.lastElementChild; prompt.innerHTML = '<span class="k">$</span> <span class="typed"></span><span class="cursor"></span>';
+      const out = prompt.querySelector('.typed'); let i = 0;
+      const iv = setInterval(() => { out.textContent = cmd.slice(0, ++i); if (i >= cmd.length) { clearInterval(iv); setTimeout(() => { prompt.innerHTML = `<span class="k">$</span> ${esc(cmd)}`; const p = document.createElement('div'); p.className = 'ln'; p.innerHTML = '<span class="k">$</span> <span class="cursor"></span>'; log.appendChild(p); typing = false; res(); }, 120); } }, 18);
+    });
+  }
+
+  /* ---------- API ---------- */
+  async function api(method, path, body, signal) {
+    let res;
+    try {
+      res = await fetch(API + path, { method, signal, headers: body ? { 'Content-Type': 'application/json' } : undefined, body: body ? JSON.stringify(body) : undefined });
+    } catch (e) { if (e.name === 'AbortError') throw e; throw new Error(`${method} ${path}: backend unreachable (${e.message})`); }
+    const txt = await res.text(); let data = null;
+    try { data = txt ? JSON.parse(txt) : null; } catch (e) { throw new Error(`${method} ${path}: HTTP ${res.status}, not JSON`); }
+    if (!res.ok) throw new Error(`${method} ${path}: HTTP ${res.status} ${esc((data && (data.error || data.detail)) || res.statusText)}`);
+    return data;
+  }
+
+  /* ---------- state ---------- */
+  const state = { earned: Array(N).fill(0), on: Array(N).fill(false), payslips: false, pr: 'averaging', preset: 'sara' };
+  const PRESETS = {
+    sara: () => ({ earned: Array.from({ length: N }, (_, i) => i < 13 ? 1500 : 0), on: Array.from({ length: N }, (_, i) => i >= 13) }),
+    even: () => ({ earned: Array(N).fill(750), on: Array(N).fill(true) }),
+    casual: () => ({ earned: [0, 420, 0, 880, 1250, 0, 300, 0, 650, 0, 0, 1500, 200, 0, 780, 0, 0, 400, 950, 0, 0, 1300, 0, 250, 600, 0], on: Array(N).fill(true) }),
+  };
+  const PRESET_NAME = { sara: 'Sara', even: 'The even earner', casual: 'The casual' };
+
+  /* ---------- canvas ---------- */
+  const bars = $('#bars'), togs = $('#togs');
+  const cols = [], tbtns = [];
+  [2000, 1500, 1000, 500, 0].forEach(v => {
+    const y = (1 - v / MAX) * 100;
+    $('#yax').insertAdjacentHTML('beforeend', `<span style="top:${y}%">${v ? '$' + (v >= 1000 ? (v / 1000) + 'k' : v) : '$0'}</span>`);
+    bars.insertAdjacentHTML('beforeend', `<div class="grid-l" style="top:${y}%"></div>`);
+  });
+  for (let i = 0; i < N; i++) {
+    const c = document.createElement('div'); c.className = 'col'; c.tabIndex = 0; c.dataset.i = i;
+    c.setAttribute('role', 'slider'); c.setAttribute('aria-valuemin', 0); c.setAttribute('aria-valuemax', MAX); c.setAttribute('aria-label', `Fortnight ${i + 1} earned income`);
+    c.innerHTML = '<div class="fill"></div><div class="cap"></div>';
+    bars.appendChild(c); cols.push(c);
+    const t = document.createElement('button'); t.className = 'tog'; t.setAttribute('aria-label', `Fortnight ${i + 1} on benefit`); t.dataset.i = i;
+    togs.appendChild(t); tbtns.push(t);
+    $('#fnl').insertAdjacentHTML('beforeend', `<span>${(i === 0 || i === 12 || i === 13 || i === 25) ? i + 1 : ''}</span>`);
+  }
+  const avgLine = document.createElement('div'); avgLine.className = 'avg'; avgLine.innerHTML = '<span></span>'; bars.appendChild(avgLine);
+  const fig = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); fig.setAttribute('class', 'figure'); fig.setAttribute('viewBox', '0 0 22 30'); fig.innerHTML = '<use href="#figure"/>'; fig.setAttribute('aria-hidden', 'true');
+  bars.appendChild(fig);
+
+  function paintCanvas() {
+    let total = 0, top = 0;
+    for (let i = 0; i < N; i++) {
+      const v = state.earned[i]; total += v; if (v > state.earned[top]) top = i;
+      cols[i].querySelector('.fill').style.height = (v / MAX * 100) + '%';
+      cols[i].querySelector('.cap').style.bottom = (v / MAX * 100) + '%';
+      cols[i].classList.toggle('onb', state.on[i]);
+      cols[i].setAttribute('aria-valuenow', v); cols[i].setAttribute('aria-valuetext', `$${v}${state.on[i] ? ', on benefit' : ''}`);
+      tbtns[i].setAttribute('aria-pressed', String(state.on[i]));
+    }
+    $('#annual').textContent = money(total);
+    const avg = total / N;
+    avgLine.style.top = (1 - Math.min(avg, MAX) / MAX) * 100 + '%';
+    avgLine.querySelector('span').textContent = `annual ÷ 26 = ${money(avg)}`;
+    const c = cols[top], w = c.offsetWidth;
+    fig.style.left = (c.offsetLeft + w / 2 - 9) + 'px';
+    fig.style.bottom = (state.earned[top] / MAX * bars.offsetHeight) + 'px';
+    $$('[data-preset]').forEach(b => b.classList.toggle('on', b.dataset.preset === state.preset));
+    $$('[data-pr]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.pr === state.pr)));
+    $('#payBtn').setAttribute('aria-pressed', String(state.payslips));
+    $('#payBtn').textContent = `Payslips available: ${state.payslips ? 'yes' : 'no'}`;
+  }
+  function readout(i) {
+    if (i == null) { $('#ro').innerHTML = ''; return; }
+    $('#ro').innerHTML = `F${String(i + 1).padStart(2, '0')} · <b>${money(state.earned[i])}</b> · ${state.on[i] ? 'on benefit' : 'off benefit'}`;
+  }
+
+  let debounce = null;
+  const scheduleRun = (ms = 400) => { clearTimeout(debounce); debounce = setTimeout(() => runGate(), ms); };
+  const markCustom = () => { if (state.preset) { state.preset = null; } };
+
+  let dragging = false, lastIdx = null;
+  function setFromPointer(e) {
+    const r = bars.getBoundingClientRect();
+    const i = Math.max(0, Math.min(N - 1, Math.floor((e.clientX - r.left) / r.width * N)));
+    const v = Math.round(Math.max(0, Math.min(1, (r.bottom - e.clientY) / r.height)) * MAX / STEP) * STEP;
+    const from = lastIdx == null ? i : lastIdx;
+    for (let k = Math.min(from, i); k <= Math.max(from, i); k++) state.earned[k] = v;
+    lastIdx = i;
+    cols.forEach((c, k) => c.classList.toggle('hot', k === i));
+    markCustom(); paintCanvas(); readout(i);
+  }
+  bars.addEventListener('pointerdown', (e) => { dragging = true; lastIdx = null; bars.setPointerCapture(e.pointerId); clearTimeout(debounce); setFromPointer(e); e.preventDefault(); });
+  bars.addEventListener('pointermove', (e) => { if (dragging) setFromPointer(e); else { const r = bars.getBoundingClientRect(); readout(Math.max(0, Math.min(N - 1, Math.floor((e.clientX - r.left) / r.width * N)))); } });
+  const endDrag = () => { if (!dragging) return; dragging = false; lastIdx = null; cols.forEach(c => c.classList.remove('hot')); scheduleRun(400); };
+  bars.addEventListener('pointerup', endDrag); bars.addEventListener('pointercancel', endDrag);
+  bars.addEventListener('pointerleave', () => { if (!dragging) readout(null); });
+  bars.addEventListener('keydown', (e) => {
+    const i = Number(e.target.dataset.i); if (Number.isNaN(i)) return;
+    const d = { ArrowUp: STEP * 2, ArrowDown: -STEP * 2, PageUp: 500, PageDown: -500 }[e.key];
+    if (d) { e.preventDefault(); state.earned[i] = Math.max(0, Math.min(MAX, state.earned[i] + d)); markCustom(); paintCanvas(); readout(i); scheduleRun(400); }
+    if (e.key === 'ArrowRight' && cols[i + 1]) { e.preventDefault(); cols[i + 1].focus(); readout(i + 1); }
+    if (e.key === 'ArrowLeft' && cols[i - 1]) { e.preventDefault(); cols[i - 1].focus(); readout(i - 1); }
+  });
+  togs.addEventListener('click', (e) => { const t = e.target.closest('.tog'); if (!t) return; const i = Number(t.dataset.i); state.on[i] = !state.on[i]; markCustom(); paintCanvas(); readout(i); scheduleRun(400); });
+  $$('[data-preset]').forEach(b => b.addEventListener('click', () => { const p = PRESETS[b.dataset.preset](); state.earned = p.earned; state.on = p.on; state.preset = b.dataset.preset; paintCanvas(); runGate(); }));
+  $$('[data-pr]').forEach(b => b.addEventListener('click', () => { state.pr = b.dataset.pr; paintCanvas(); runGate(); }));
+  $('#payBtn').addEventListener('click', () => { state.payslips = !state.payslips; paintCanvas(); runGate(); });
+  addEventListener('resize', paintCanvas);
+
+  /* ---------- rules ---------- */
+  let rules = [];
+  async function loadRules() {
+    setBusy('muse', 1);
+    try {
+      const d = await api('GET', '/api/rules');
+      rules = (d && d.rules) || [];
+      const a = d.act || {}, m = a.muse || {};
+      if (a.pages) $('#actMeta').textContent = `Social Security Act 1991 · vol. 3 · ${a.pages} pages · read by Muse Spark`;
+      const ver = rules.filter(r => r.verified).length;
+      $('#museMeta').textContent = `${m.model || 'Muse Spark'} · ${m.prompt_tokens ? Math.round(m.prompt_tokens / 1000) + 'k tokens · ' : ''}${m.seconds ? m.seconds + ' s' : ''}`;
+      renderRules();
+      logLine(`<span class="k">muse</span>  ${esc(a.title || 'Act')} · ${rules.length} rules · <span class="ok">${ver}/${rules.length} verbatim</span>${a.compilation ? ' · ' + esc(a.compilation.split(' ')[0]) : ''}`);
+    } catch (e) {
+      $('#rules').innerHTML = `<div class="empty" style="color:var(--signal)">${esc(e.message)}</div>`;
+      logErr('rules', e); ledErr('muse');
+    } finally { setBusy('muse', -1); }
+  }
+  function renderRules() {
+    const box = $('#rules'); box.innerHTML = '';
+    if (!rules.length) { box.innerHTML = '<div class="empty">no rules returned</div>'; return; }
+    rules.forEach(r => {
+      const el = document.createElement('div'); el.className = 'rule'; el.dataset.rule = norm(r.id);
+      const v = !!r.verified;
+      el.innerHTML = `<span class="ic" style="color:${v ? 'var(--butter)' : 'var(--amber)'}"><svg><use href="#${v ? 'i-observed' : 'i-inferred'}"/></svg></span>
+        <div><div class="rid">s${esc(r.id)}${r.role ? ` <span class="cite">· ${esc(r.role)}</span>` : ''}</div>
+        <div class="q" title="${esc(r.quote)}">“${esc(r.quote)}”</div>
+        <div class="chips"><span class="chip">p.${esc(r.page)}</span><span class="chip ${v ? 'ok' : 'inf'}">${v ? 'VERBATIM · OBSERVED' : 'UNVERIFIED'}</span><span class="tch"></span></div></div>`;
+      box.appendChild(el);
+    });
+  }
+  function touchRules(clauses) {
+    const hit = {}; (clauses || []).forEach(c => { if (c.p > 0.5) hit[norm(c.id)] = c.p; });
+    $$('#rules .rule').forEach(el => {
+      const p = hit[el.dataset.rule];
+      el.classList.toggle('touched', p != null);
+      el.querySelector('.tch').innerHTML = p != null ? `<span class="chip bad">TOUCHED p ${pct(p)}</span>` : '';
+      if (p != null) { el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); }
+    });
+  }
+
+  /* ---------- run the gate ---------- */
+  let runSeq = 0, runCtl = null, lastRun = null;
+  function setPending(on) {
+    $('#band').classList.toggle('pending', on);
+    const l = $('#pendingLbl'); if (l) l.innerHTML = on ? '<span class="spin"></span>running gate…' : '';
+  }
+  async function runGate(opts = {}) {
+    clearTimeout(debounce);
+    const seq = ++runSeq; if (runCtl) runCtl.abort(); runCtl = new AbortController();
+    const body = { earned: state.earned.map(v => Math.round(v * 100) / 100), on_benefit: state.on.slice(), payslips: state.payslips, pr: state.pr };
+    const cmd = `onus gate --pr ${state.pr} --payslips ${state.payslips ? 'yes' : 'no'}${state.preset ? ' --person ' + state.preset : ''}`;
+    if (opts.typed) await typeCommand(cmd); else logLine(`<span class="k">$</span> ${esc(cmd)}`);
+    if (seq !== runSeq) return;
+    setPending(true); setBusy('snap', 1);
+    const t = performance.now();
+    try {
+      const r = await api('POST', '/api/run', body, runCtl.signal);
+      if (seq !== runSeq) return;
+      renderRun(r, Math.round(performance.now() - t));
+    } catch (e) {
+      if (e.name === 'AbortError') return;
+      if (seq === runSeq) { logErr('run', e); ledErr('snap'); $('#bandMeta').textContent = 'run failed · see log'; }
+    } finally {
+      setBusy('snap', -1);
+      if (seq === runSeq) setPending(false);
+    }
+  }
+
+  function statusText(o) { return o && o.status && o.status !== 'OK' ? o.status.replace(/_/g, ' ') : null; }
+
+  function renderRun(r, rtt) {
+    lastRun = r;
+    const v = r.verdict || {}, s = r.snap || {}, L = r.letter || {}, lawful = r.lawful || {}, pr = r.pr || {};
+    const route = (v.route || s.route || '').toUpperCase();
+    const kind = route === 'BLOCK' ? 'bad' : route === 'ASK' ? 'abs' : 'ok';
+    const clause = v.clause || pr.misreads || '';
+
+    /* band */
+    const amt = L.would_send ? L.amount : 0;
+    const lawAmt = L.lawful_amount != null ? L.lawful_amount : lawful.debt;
+    const prStatus = statusText(pr);
+    $('#bandCount').className = 'count' + (route === 'BLOCK' && L.would_send ? ' bad' : '');
+    $('#bandCount').innerHTML = prStatus && !L.would_send ? `<span style="font-size:.5em">${esc(prStatus)}</span>` : `${money(amt)}<small> vs ${statusText(lawful) ? esc(statusText(lawful)) : money(lawAmt)} lawful</small>`;
+    $('#bandCountMeta').textContent = L.would_send ? `letter the PR would send · the Act: ${statusText(lawful) || money2(lawAmt)}` : 'the PR sends no letter';
+    const vtext = route === 'BLOCK' ? `BLOCKED — ${clause}` : route === 'ASK' ? 'ASK A LAWYER' : route === 'PASS' ? 'PASS' : (v.headline || route || '—');
+    $('#bandVerdict').innerHTML = `<span class="v-${kind}">${esc(vtext)}</span><span class="cursor" style="margin-left:.12em;height:.8em;vertical-align:0"></span>`;
+    $('#band').className = 'band k-' + kind;
+    $('#bandMeta').textContent = [pr.title ? `PR ${pr.title}` : null, v.headline && v.headline !== vtext ? v.headline : null, v.clause ? `s${v.clause}${v.page ? ' p.' + v.page : ''}` : null, `SubQ Snap ${s.latency_ms != null ? s.latency_ms + ' ms' : ''}`, s.input_tokens ? `${s.input_tokens.toLocaleString()} tokens` : null, `round trip ${rtt} ms`].filter(Boolean).join(' · ');
+
+    /* log */
+    const sealed = r.sealed || {};
+    logLine(`<span class="k">seal</span>  suite ${esc((sealed.hash || '').slice(0, 10))}… · ${sealed.n_tests ?? '?'} tests · sealed ${esc(fmtTime(sealed.sealed_at))}`);
+    logLine(`<span class="k">pr</span>    ${esc(pr.id || state.pr)} → ${prStatus ? '<span class="abs">' + esc(prStatus) + '</span>' : 'debt ' + money2(pr.debt)}${L.would_send ? ' · <span class="bad">letter</span>' : ''}`);
+    logLine(`<span class="k">law</span>   lawful → ${statusText(lawful) ? '<span class="abs">' + esc(statusText(lawful)) + '</span>' : '<span class="ok">debt ' + money2(lawful.debt) + '</span>'}`);
+    if (r.twin) logLine(`<span class="k">twin</span>  ${r.twin.same_inputs_to_pr ? 'same inputs to PR' : 'inputs differ'} · lawful ${money2(r.twin.lawful && r.twin.lawful.debt)}`);
+    const fails = sealed.failed || [];
+    if (fails.length) logLine(`<span class="k">tests</span> <span class="bad">${fails.length} failed</span> · ${esc([...new Set(fails.map(f => f.family))].join(', '))}`);
+    else logLine(`<span class="k">tests</span> <span class="ok">0 failed</span>`);
+    const top = (s.clauses || []).slice().sort((a, b) => b.p - a.p)[0];
+    logLine(`<span class="k">snap</span>  <span class="${kind}">${esc(route)}</span>${top ? ' · ' + esc(top.id) + ' p ' + pct(top.p) : ''} · ${s.latency_ms ?? '?'} ms · ${s.input_tokens ?? '?'} tok`);
+
+    renderLetter(r, route, kind);
+    renderTwin(r);
+    renderSnap(s, route, kind);
+    renderSealed(sealed);
+    touchRules(s.clauses);
+    avgLine.classList.toggle('hot', route === 'BLOCK' && /averag/i.test((pr.id || state.pr) + ' ' + (pr.description || '')));
+    if (!certIssued) { $('#certTitle').textContent = 'Not yet issued'; }
+  }
+
+  function fmtTime(iso) {
+    if (!iso) return '—';
+    const d = new Date(iso); if (isNaN(d)) return String(iso);
+    return d.toLocaleString('en-AU', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+  }
+
+  function renderLetter(r, route, kind) {
+    const L = r.letter || {}, lawful = r.lawful || {}, pr = r.pr || {};
+    const n = $('#notice'), st = $('#stamp');
+    $('#noticeRef').textContent = 'ref ONUS-' + ((r.sealed && r.sealed.hash) || '000000').slice(0, 6).toUpperCase();
+    if (L.would_send) {
+      n.classList.remove('void');
+      $('#noticeBody').innerHTML = `Dear ${esc(state.preset === 'sara' ? 'Sara' : 'customer')},<br>We compared your income with the tax office’s annual figure and recalculated your Newstart Allowance.<div class="amt">You owe ${money2(L.amount)}</div>This amount is a debt due to the Commonwealth under s1223 of the <i>Social Security Act 1991</i>. Repay within 28 days.`;
+    } else {
+      n.classList.add('void');
+      const ps = statusText(pr);
+      $('#noticeBody').innerHTML = ps ? `The PR returned <b>${esc(ps)}</b>.<br>No letter is generated.` : `No debt calculated.<br>No letter is generated.`;
+    }
+    st.className = 'stamp';
+    if (L.would_send) {
+      st.textContent = route === 'BLOCK' ? 'WOULD HAVE BEEN SENT' : route === 'ASK' ? 'HELD FOR REVIEW' : 'CLEARED BY ONUS';
+      if (route === 'ASK') st.classList.add('frost'); else if (route !== 'BLOCK') st.classList.add('ok');
+      void st.offsetWidth; st.classList.add('on');
+    }
+    $('#prAmt').textContent = statusText(pr) || money2(pr.debt);
+    $('#prAmt').style.color = route === 'BLOCK' ? 'var(--signal)' : '';
+    $('#lawAmt').textContent = statusText(lawful) || money2(lawful.debt);
+    $('#lawAmt').style.color = statusText(lawful) ? 'var(--frost)' : '';
+    const v = r.verdict || {};
+    $('#lawCite').textContent = v.clause ? `s${v.clause}${v.page ? ' · p.' + v.page : ''}` : (pr.misreads ? `PR misreads s${pr.misreads}` : '');
+  }
+
+  function sparkSvg(earned, on) {
+    const w = 260 / N; let out = '';
+    for (let i = 0; i < N; i++) {
+      const h = Math.min(1, (earned[i] || 0) / MAX) * 44;
+      if (on && on[i]) out += `<rect x="${i * w}" y="0" width="${w - 1.5}" height="46" fill="var(--onb)"/>`;
+      out += `<rect x="${i * w}" y="${46 - h}" width="${w - 1.5}" height="${h}" fill="var(--bar)"/>`;
+      if (on && on[i]) out += `<rect x="${i * w}" y="49" width="${w - 1.5}" height="5" fill="var(--butter)"/>`;
+    }
+    return out;
+  }
+  function renderTwin(r) {
+    const t = r.twin;
+    if (!t) { $('#twinSvg').innerHTML = ''; $('#twinText').className = 'muted'; $('#twinText').textContent = 'No twin for this run.'; return; }
+    $('#twinSvg').innerHTML = sparkSvg(t.earned || [], t.on_benefit || []);
+    const who = state.preset ? `${PRESET_NAME[state.preset]}’s` : 'This person’s';
+    const tl = t.lawful || {}, me = r.lawful || {};
+    const tAmt = statusText(tl) || money(tl.debt), mAmt = statusText(me) || money(me.debt);
+    const differ = (statusText(tl) || tl.debt) !== (statusText(me) || me.debt);
+    $('#twinText').className = '';
+    $('#twinText').innerHTML = `${t.same_inputs_to_pr ? '<b>Same inputs to the PR.</b>' : 'Inputs to the PR differ.'} The twin’s lawful debt: <b>${esc(tAmt)}</b>. ${esc(who)}: <b style="color:${differ ? 'var(--signal)' : 'inherit'}">${esc(mAmt)}</b>. ${t.same_inputs_to_pr && differ ? 'One answer can’t be right for both.' : ''}${t.explanation ? `<br><span class="cite" style="margin-top:4px">${esc(t.explanation)}</span>` : ''}`;
+  }
+
+  function renderSnap(s, route, kind) {
+    $('#snapRoute').innerHTML = route ? `<span class="chip lg ${kind}">${esc(route)}</span>` : '';
+    const clauses = (s.clauses || []).slice().sort((a, b) => b.p - a.p);
+    const tri = s.triage || {};
+    const probs = Object.entries(tri.probabilities || {}).sort((a, b) => b[1] - a[1]);
+    const disc = s.disclosure_p;
+    $('#snapBody').className = '';
+    $('#snapBody').innerHTML = `
+      <div class="label" style="margin-top:10px">Clauses this diff touches</div>
+      <div class="row">${clauses.map(c => `<span class="chip ${c.p > .5 ? 'bad' : ''}">${esc(c.id)} ${pct(c.p)}</span>`).join('') || '<span class="muted">none</span>'}</div>
+      <div class="row"><span class="kv">PR discloses the change: <b style="color:${disc != null && disc < .5 ? 'var(--signal)' : 'inherit'}">p ${pct(disc)}</b></span>${s.severity != null ? `<span class="kv">· severity <b>${Number(s.severity).toFixed(1)}</b></span>` : ''}</div>
+      <div class="label" style="margin-top:12px">Triage · ${esc(tri.choice || '—')} · confidence ${pct(tri.confidence)}</div>
+      <div class="post">${probs.map(([k, p]) => `<div class="r ${k === tri.choice ? 'win' : ''}"><span>${esc(k)}</span><span class="track"><span class="fill" style="width:${Math.round(p * 100)}%"></span></span><span class="pv">${pct(p)}</span></div>`).join('')}</div>
+      <div class="snap-proof"><span><span class="ms">${s.latency_ms ?? '—'}<span style="font-size:.5em;color:var(--ink-3)"> ms</span></span></span><span class="kv"><b>${s.input_tokens != null ? s.input_tokens.toLocaleString() : '—'}</b> input tokens · one request</span></div>`;
+  }
+
+  function renderSealed(sd) {
+    const fails = sd.failed || [];
+    const fam = {}; fails.forEach(f => fam[f.family] = (fam[f.family] || 0) + 1);
+    $('#sealed').innerHTML = `Sealed suite <b>${esc((sd.hash || '').replace(/^sha256[:-]?/, '').slice(0, 12))}</b>… · sealed <b>${esc(fmtTime(sd.sealed_at))}</b> · <b>${sd.n_tests ?? '?'}</b> tests<br>
+      ${fails.length ? `<span style="color:var(--signal)">${fails.length} failed</span> · ${Object.entries(fam).map(([k, n]) => `${esc(k)} ×${n}`).join(' · ')}` : '<span>0 failed</span>'}
+      ${fails.length ? `<div class="fails">${fails.slice(0, 4).map(f => `<div><span class="chip bad">${esc(f.family)}</span><span title="${esc(f.detail)}">${esc(f.id)} · ${esc(f.detail)}</span></div>`).join('')}</div>` : ''}`;
+  }
+
+  /* ---------- red team ---------- */
+  let rtBusy = false;
+  async function redTeam() {
+    if (rtBusy) return; rtBusy = true;
+    $('#rtBtn').disabled = true; $('#rtBtn2').disabled = true;
+    $('#redteam').innerHTML = '<div class="empty"><span class="spin"></span>running Gemini’s misreadings through repo CI and ONUS…</div>';
+    await typeCommand('onus redteam --mutants gemini');
+    setBusy('gemini', 1);
+    try {
+      const d = await api('POST', '/api/redteam', {});
+      const ms = d.mutants || [], k = d.k ?? ms.length;
+      $('#redteam').innerHTML = `<table class="rt"><colgroup><col style="width:40%"><col style="width:22%"><col style="width:19%"><col style="width:19%"></colgroup>
+        <thead><tr><th>Mutant</th><th>Misreads</th><th>Repo CI</th><th>ONUS</th></tr></thead><tbody>
+        ${ms.map(m => { const ci = String(m.repo_ci || '').toLowerCase(), on = String(m.onus || '').toUpperCase(); return `<tr><td title="${esc(m.description)}">${esc(m.id)}</td><td>${esc(m.misreads)}</td><td><span class="chip">${ci === 'pass' ? 'green ✓' : esc(ci.toUpperCase() || '—')}</span></td><td><span class="chip ${on === 'BLOCK' ? 'bad' : on === 'ASK' ? 'abs' : ''}">${esc(on || '—')}</span></td></tr>`; }).join('')}
+        </tbody></table>
+        <div class="rt-sum">Repo CI caught <b>${d.repo_ci_caught ?? '?'}/${k}</b> · ONUS caught <b style="color:var(--signal)">${d.onus_caught ?? '?'}/${k}</b></div>`;
+      logLine(`<span class="k">gemini</span> ${k} mutants · CI caught <span class="bad">${d.repo_ci_caught}/${k}</span> · ONUS caught <span class="ok">${d.onus_caught}/${k}</span>`);
+    } catch (e) {
+      $('#redteam').innerHTML = `<div class="empty" style="color:var(--signal)">${esc(e.message)}</div>`;
+      logErr('redteam', e); ledErr('gemini');
+    } finally { setBusy('gemini', -1); rtBusy = false; $('#rtBtn').disabled = false; $('#rtBtn2').disabled = false; }
+  }
+  $('#rtBtn').addEventListener('click', redTeam);
+  $('#rtBtn2').addEventListener('click', redTeam);
+
+  /* ---------- certificate: the press ---------- */
+  let certIssued = false, certIv = null;
+  $('#certBtn').addEventListener('click', async () => {
+    const btn = $('#certBtn'); btn.disabled = true;
+    await typeCommand('onus cert --sign');
+    try {
+      const d = await api('POST', '/api/cert', {});
+      const main = $('#main'); main.classList.remove('press'); void main.offsetWidth; main.classList.add('press');
+      const seal = $('#seal'); seal.classList.remove('stamped'); void seal.getBoundingClientRect(); seal.classList.add('stamped');
+      certIssued = true;
+      const route = lastRun && ((lastRun.verdict && lastRun.verdict.route) || (lastRun.snap && lastRun.snap.route));
+      const st = d.statement || {}, pred = st.predicate || {};
+      $('#certTitle').textContent = route === 'BLOCK' ? 'Merge refused' : route === 'ASK' ? 'Referred to counsel' : route === 'PASS' ? 'Cleared to merge' : 'Statement issued';
+      const v = (lastRun && lastRun.verdict) || {};
+      $('#certText').innerHTML = `${route === 'BLOCK' ? `PR <b>${esc(lastRun.pr && lastRun.pr.id)}</b> contradicts <b style="color:var(--signal);font-weight:500">s${esc(v.clause)}</b>${v.page ? ` (p.${esc(v.page)})` : ''}.` : esc(v.headline || '')} ${st.predicateType ? `<br><span class="cite">${esc(st.predicateType)}</span>` : ''}${pred && pred.verdict && typeof pred.verdict === 'string' ? ` <span class="cite">· ${esc(pred.verdict)}</span>` : ''}`;
+      const hex = String(d.sha256 || '').replace(/^sha256[:-]?/, '');
+      const el = $('#hash'); let i = 0; el.textContent = 'sha256 '; clearInterval(certIv);
+      certIv = setInterval(() => { el.textContent = 'sha256 ' + hex.slice(0, i += 2); if (i >= hex.length) clearInterval(certIv); }, reduce ? 0 : 24);
+      logLine(`<span class="k">cert</span>  in-toto statement · sha256 <span class="ok">${esc(hex.slice(0, 16))}…</span>`);
+    } catch (e) { logErr('cert', e); $('#hash').textContent = 'sha256 — (' + e.message + ')'; }
+    finally { btn.disabled = false; }
+  });
+
+  /* ---------- testimony ---------- */
+  async function ask(claim) {
+    $('#answer').innerHTML = '<span class="label"><span class="spin"></span>Muse is reading the Act…</span>';
+    setBusy('muse', 1);
+    logLine(`<span class="k">$</span> onus ask "${esc(claim.length > 48 ? claim.slice(0, 48) + '…' : claim)}"`);
+    try {
+      const d = await api('POST', '/api/ask', { claim });
+      const v = String(d.verdict || '').toUpperCase();
+      const c = v === 'CONFIRMED' ? 'ok' : v === 'REFUTED' ? 'bad' : 'abs';
+      $('#answer').innerHTML = `<span class="chip lg ${c}">${esc(v || '—')}</span> ${d.rule_id ? `<span class="cite" style="margin-left:6px">s${esc(d.rule_id)}${d.page ? ' · p.' + esc(d.page) : ''}</span>` : ''} <span class="cite" style="margin-left:6px">${d.latency_ms != null ? esc(d.latency_ms) + ' ms' : ''}${d.model ? ' · ' + esc(d.model) : ''}</span>${d.quote ? `<blockquote>“${esc(d.quote)}”</blockquote>` : ''}`;
+      logLine(`<span class="k">muse</span>  <span class="${c}">${esc(v)}</span>${d.rule_id ? ' · s' + esc(d.rule_id) : ''}${d.page ? ' p.' + esc(d.page) : ''} · ${esc(d.latency_ms ?? '?')} ms`);
+    } catch (e) { $('#answer').innerHTML = `<span style="color:var(--signal)" class="mono">${esc(e.message)}</span>`; logErr('ask', e); ledErr('muse'); }
+    finally { setBusy('muse', -1); }
+  }
+  $('#testimony').addEventListener('submit', (e) => { e.preventDefault(); const q = $('#claimIn').value.trim() || $('#claimIn').placeholder; ask(q); });
+  $$('[data-claim]').forEach(b => b.addEventListener('click', () => { $('#claimIn').value = b.dataset.claim; ask(b.dataset.claim); }));
+
+  /* ---------- run button + boot ---------- */
+  $('#runBtn').addEventListener('click', () => runGate({ typed: true }));
+  const p0 = PRESETS.sara(); state.earned = p0.earned; state.on = p0.on; state.preset = 'sara';
+  paintCanvas();
+  requestAnimationFrame(paintCanvas);
+  (async () => { await loadRules(); runGate({ typed: true }); })();
+})();
+</script>
+</body>
+</html>
