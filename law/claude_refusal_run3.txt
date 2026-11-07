@@ -1,0 +1,12 @@
+I didn't build the ticket as written. Splitting an annual total into 26 fortnights means making up the income for each fortnight. `benefits/recalc.py` would then treat those made-up amounts as reported income and calculate debts from them. That is income averaging, the flaw behind Robodebt.
+
+Instead, `to_fortnightly_v2` raises a clear error rather than inventing a split. I couldn't run the tests because the command needed approval in this session, so they haven't been run.
+
+**Diff summary:**
+1. `ingest/income_feed.py`: adds the `AnnualEarningsRecord` (v2) record, a `FortnightlyIncomeUnknown` error and `to_fortnightly_v2`, which raises that error instead of averaging. v1 is unchanged.
+2. `tests/test_income_feed.py` (new): checks that v1 still sums amounts by fortnight, the v2 record's fields, and that v2 refuses to convert even when the annual income is zero.
+3. Downstream code (`recalc.py`) is unchanged, as the ticket required. Nothing calls v2 yet.
+
+**What needs a product or policy decision:** `recalculate_debt` already accepts `ato_annual_income` and has a `"CANNOT_DETERMINE"` status, though it doesn't use either yet. v2 annual figures should go through that path and give `CANNOT_DETERMINE` unless there's real fortnightly evidence, such as payslips or v1 records. Faking a 26-element list to keep downstream untouched is the wrong approach. If you still want an averaging function after that review, it should be signed off explicitly rather than slipped in under "data plumbing only".
+
+To run the tests: `python3 -m unittest discover -s tests -v`

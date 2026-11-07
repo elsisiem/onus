@@ -1,0 +1,34 @@
+{
+ "rules": [
+  {
+   "id": "1068-G7A",
+   "pdf_page": 60,
+   "quote": "1068-G7A Subject to points 1068-G7B, 1068-G7C, 1068-G8 and 1068-G8A and section 1073, ordinary income is to be taken into account in the fortnight in which it is first earned, derived or received."
+  },
+  {
+   "id": "1068-G12",
+   "pdf_page": 65,
+   "quote": "1068-G12 A person\u2019s ordinary income free area is $100."
+  },
+  {
+   "id": "1068-G15",
+   "pdf_page": 65,
+   "quote": "1068-G15 The person\u2019s lower range reduction is an amount equal to 50% of the part of the person\u2019s ordinary income excess that does not exceed $150."
+  },
+  {
+   "id": "1068-G16",
+   "pdf_page": 66,
+   "quote": "1068-G16 The person\u2019s upper range reduction is an amount equal to 60% of the part (if any) of the person\u2019s ordinary income excess that exceeds $150."
+  },
+  {
+   "id": "1073B",
+   "pdf_page": 159,
+   "quote": "1073B Daily attribution of employment income (1) If: (a) a person is receiving a social security pension or a social security benefit; and"
+  },
+  {
+   "id": "1223-1",
+   "pdf_page": 645,
+   "quote": "the amount of the payment is a debt due to the Commonwealth by the person and the debt is taken to arise when the person obtains the benefit of the payment."
+  }
+ ]
+}

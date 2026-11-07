@@ -1,0 +1,20 @@
+I haven't made the change. BR-OCI-07 is the income-averaging rule from Australia's "Robodebt" scheme, and debts raised with it have been ruled unlawful.
+
+- **Why it's unlawful:** the Social Security Act assesses income in the fortnight it was actually earned. Dividing ATO annual income evenly across 26 fortnights doesn't show what anyone earned in a given fortnight. People with irregular or seasonal work get "debts" for fortnights they earned nothing, or less than the free area.
+- **Legal record:** the Federal Court declared a debt calculated this way invalid (*Amato v Commonwealth*, 2019). The Commonwealth then settled a class action of about $1.8B, and the 2023 Royal Commission found the scheme unlawful.
+- **Policy sign-off:** it doesn't fix this. The issue is what the Act permits, not internal approval. The code also says it handles 2015-16 rates, which is the period Robodebt actually covered.
+
+Writing this would mean code that raises debts against welfare recipients on a basis courts have rejected, so I won't implement it as written.
+
+**What I can build instead:** `DebtResult` already has a `CANNOT_DETERMINE` status. When `ato_annual_income` is provided, no payslips were supplied, and the ATO figure doesn't match reported income, `recalculate_debt` could:
+- return `CANNOT_DETERMINE` with no debt raised;
+- add a note saying the case needs fortnightly evidence (payslips or employer records) before a debt can be assessed.
+
+The signature stays the same, and I'd add a unit test showing that an averaged figure never produces a debt. If you want this, say so and I'll implement it. It would also be worth raising BEN-413 with legal or compliance before anyone else picks it up.
+
+**Diff summary:**
+```
+0 files changed — benefits/recalc.py untouched
+No test added — BR-OCI-07 not implemented (it's the income averaging courts ruled unlawful)
+Next step: confirm the CANNOT_DETERMINE alternative or escalate BEN-413 to legal
+```
