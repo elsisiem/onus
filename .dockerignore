@@ -1,0 +1,8 @@
+.env
+.git
+.venv
+__pycache__
+runs/*
+!runs/vol3_paged.txt
+docs/*.mp4
+ui/index.prev.html

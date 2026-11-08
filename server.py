@@ -169,5 +169,6 @@ class H(BaseHTTPRequestHandler):
 if __name__ == "__main__":
     oracle.seal()
     port = int(os.environ.get("PORT", "8787"))
-    print(f"ONUS on http://127.0.0.1:{port}  ({len(RULES)} rules, {sum(r['verified'] for r in RULES)} verified)")
-    ThreadingHTTPServer(("127.0.0.1", port), H).serve_forever()
+    host = os.environ.get("HOST", "127.0.0.1")
+    print(f"ONUS on http://{host}:{port}  ({len(RULES)} rules, {sum(r['verified'] for r in RULES)} verified)")
+    ThreadingHTTPServer((host, port), H).serve_forever()

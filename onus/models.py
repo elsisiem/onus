@@ -15,7 +15,7 @@ def _env():
     return env
 
 
-ENV = _env()
+ENV = {**_env(), **{k: v for k, v in os.environ.items() if k.endswith("_API_KEY")}}  # deploy secrets override .env
 
 
 def _post(url, headers, body, timeout=60):
