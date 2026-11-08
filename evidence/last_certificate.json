@@ -1,0 +1,182 @@
+{
+ "statement": {
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+   {
+    "name": "prs/averaging",
+    "digest": {
+     "sha256": "459cf7e052eb63560f8ea3ce3af6559bcf7548b4fe38d7f739bf4525e61560f9"
+    }
+   }
+  ],
+  "predicateType": "https://onus.dev/statute-conformance/v0.1",
+  "predicate": {
+   "verifier": {
+    "id": "onus",
+    "models": {
+     "reader": "muse-spark-1.3",
+     "decider": "subq-snap-1.1",
+     "red_team": "gemini-3.8-flash"
+    }
+   },
+   "statute": {
+    "title": "Social Security Act 1991, Volume 3",
+    "compilation": "C2016C00230 (compilation 147, in force 10 Mar 2016)",
+    "pages": 828,
+    "licence": "CC BY 4.0, legislation.gov.au",
+    "muse": {
+     "model": "muse-spark-1.3",
+     "prompt_tokens": 353116,
+     "seconds": 30.9,
+     "reasoning_tokens": 3444
+    }
+   },
+   "rules": [
+    {
+     "id": "1068-G7A",
+     "page": 60,
+     "verified": true
+    },
+    {
+     "id": "1068-G12",
+     "page": 65,
+     "verified": true
+    },
+    {
+     "id": "1068-G15",
+     "page": 65,
+     "verified": true
+    },
+    {
+     "id": "1068-G16",
+     "page": 66,
+     "verified": true
+    },
+    {
+     "id": "1073B",
+     "page": 159,
+     "verified": true
+    },
+    {
+     "id": "1223-1",
+     "page": 644,
+     "verified": true
+    }
+   ],
+   "sealed_suite": {
+    "hash": "9c1cd90cf31b0dd34e60d60ca351603366c84c09165584243561a2da4b426e52",
+    "sealed_at": "2026-11-07T23:49:02+00:00",
+    "n_tests": 12
+   },
+   "result": {
+    "route": "BLOCK",
+    "failed": [
+     {
+      "id": "twin-same-inputs",
+      "family": "twin",
+      "rule": "1068-G7A",
+      "detail": "one answer ($4875.00) for two lawful debts ($0.00 vs $10725.00)"
+     },
+     {
+      "id": "attribution-off-benefit-earner",
+      "family": "attribution",
+      "rule": "1068-G7A",
+      "detail": "PR OK $4875.00 vs statute $0.00"
+     },
+     {
+      "id": "life-alternating-casual",
+      "family": "life",
+      "rule": "1068-G7A",
+      "detail": "PR OK $1365.00 vs statute $0.00"
+     },
+     {
+      "id": "boundary-100.01",
+      "family": "boundary",
+      "rule": "1068-G12/G15/G16",
+      "detail": "PR OK $0.00 vs statute $0.01"
+     },
+     {
+      "id": "boundary-175",
+      "family": "boundary",
+      "rule": "1068-G12/G15/G16",
+      "detail": "PR OK $0.00 vs statute $37.50"
+     },
+     {
+      "id": "boundary-250",
+      "family": "boundary",
+      "rule": "1068-G12/G15/G16",
+      "detail": "PR OK $0.00 vs statute $75.00"
+     },
+     {
+      "id": "boundary-250.01",
+      "family": "boundary",
+      "rule": "1068-G12/G15/G16",
+      "detail": "PR OK $0.00 vs statute $75.01"
+     },
+     {
+      "id": "boundary-600",
+      "family": "boundary",
+      "rule": "1068-G12/G15/G16",
+      "detail": "PR OK $0.00 vs statute $285.00"
+     },
+     {
+      "id": "boundary-1500",
+      "family": "boundary",
+      "rule": "1068-G12/G15/G16",
+      "detail": "PR OK $0.00 vs statute $825.00"
+     }
+    ],
+    "lawful_debt": 0.0,
+    "pr_debt": 4875.0
+   },
+   "decisions": {
+    "clauses": [
+     {
+      "id": "1068-G7A",
+      "p": 0.773
+     },
+     {
+      "id": "1068-G12",
+      "p": 0.006
+     },
+     {
+      "id": "1068-G15",
+      "p": 0.002
+     },
+     {
+      "id": "1068-G16",
+      "p": 0.005
+     },
+     {
+      "id": "1073B",
+      "p": 0.646
+     },
+     {
+      "id": "1223-1",
+      "p": 0.01
+     }
+    ],
+    "disclosure_p": 0.029,
+    "triage": {
+     "choice": "statute_defect",
+     "probabilities": {
+      "statute_defect": 0.968,
+      "declared_policy_change": 0.003,
+      "oracle_doubt": 0.004,
+      "statute_ambiguity": 0.017,
+      "no_divergence": 0.008
+     },
+     "confidence": 0.96
+    },
+    "severity": 2.44,
+    "route": "BLOCK",
+    "latency_ms": 475
+   },
+   "timeVerified": "2026-11-08T00:24:11+00:00",
+   "scope": "Illustrative single-adult Newstart income test; synthetic people and PRs; real statute text. Not legal advice."
+  }
+ },
+ "sha256": "97f2a480f5252132f05dc51ecbedbed31f5147a3f5f5462524c4f4202d59d3d8",
+ "signature_ed25519": "bd6b70353fc1561a476095d4571c99e77f055136aba92378dcadb8defc338757a413480ff5d611e930d175a044b134ad841dc525972b4b8705edba9d83b9d40a",
+ "public_key": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA1I3We0SffIt+VTD+8ayhcs/wUwuP1aLx9NbScVEUB9o=\n-----END PUBLIC KEY-----\n"
+}
