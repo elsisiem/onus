@@ -1,10 +1,10 @@
 """Statute oracle, observables, the twin, the sealed suite and repo CI."""
 import hashlib, json, os, datetime
-# Independent of the system under test: constants come from the Act, each with its rule and page.
-FREE_AREA = 100.0    # s1068-G12, Act PDF p.65: "ordinary income free area is $100"
-LOWER_BAND = 150.0   # s1068-G15, p.65: 50% of the excess "that does not exceed $150"
-LOWER_RATE = 0.5     # s1068-G15, p.65
-UPPER_RATE = 0.6     # s1068-G16, p.66: 60% of the excess "that exceeds $150"
+# Independent of the system under test: the constants are parsed from Muse Spark's verified quotes of the Act
+# (s1068-G12 p.65, G15 p.65, G16 p.66). No Muse reading -> no verified rules -> the gate refuses to run.
+from onus.law import constants as _act_constants
+_C = _act_constants()
+FREE_AREA, LOWER_BAND, LOWER_RATE, UPPER_RATE = _C["FREE_AREA"], _C["LOWER_BAND"], _C["LOWER_RATE"], _C["UPPER_RATE"]
 
 
 def reduction(income):
@@ -75,6 +75,39 @@ def seal():
          "hash": hashlib.sha256(body).hexdigest(), "n_tests": len(cases) + 1, "cases": cases}
     json.dump(s, open(SEAL_PATH, "w"), indent=1)
     return s
+
+
+def run_sealed_external(evaluate):
+    """Sealed suite against code we can't import (an AI-written PR in a subprocess). `evaluate(cases)` -> {id: result}."""
+    s = seal()
+    cases = []
+    for c in s["cases"]:
+        fns, ato = observables(c["earned"], c["on_benefit"], c["reported"], c["payslips"])
+        cases.append({"id": c["id"], "fortnights": fns, "ato_annual_income": ato})
+    base = next(x for x in s["cases"] if x["id"] == "attribution-off-benefit-earner")
+    tw = make_twin(base["earned"], base["on_benefit"], base["reported"])
+    res = evaluate(cases)
+    failed = []
+    for c in s["cases"]:
+        truth = lawful(c["earned"], c["on_benefit"], c["reported"])
+        got = res.get(c["id"], {"error": "no result"})
+        if "error" in got:
+            failed.append({"id": c["id"], "family": c["family"], "rule": c["rule"], "detail": "crashed: " + got["error"]}); continue
+        ok = (got["status"] == "CANNOT_DETERMINE" and c["family"] == "attribution") or abs(got["debt"] - truth["debt"]) < 0.01
+        if c["family"] == "attribution" and got["debt"] > 0:
+            ok = False
+        if not ok:
+            failed.append({"id": c["id"], "family": c["family"], "rule": c["rule"],
+                           "detail": f"PR {got['status']} ${got['debt']:.2f} vs statute ${truth['debt']:.2f}"})
+    a = res.get("attribution-off-benefit-earner", {})
+    if tw and a.get("status") not in ("CANNOT_DETERMINE", None) and "error" not in a:
+        la, lb = lawful(base["earned"], base["on_benefit"], base["reported"]), lawful(tw["earned"], tw["on_benefit"], tw["reported"])
+        if abs(la["debt"] - lb["debt"]) > 0.01:
+            failed.append({"id": "twin-same-inputs", "family": "twin", "rule": "1068-G7A",
+                           "detail": f"one answer (${a['debt']:.2f}) for two lawful debts (${la['debt']:.2f} vs ${lb['debt']:.2f})"})
+    order = {"twin": 0, "attribution": 1, "life": 2, "boundary": 3}
+    failed.sort(key=lambda f: order.get(f["family"], 9))
+    return {"hash": s["hash"], "sealed_at": s["sealed_at"], "n_tests": s["n_tests"], "failed": failed}
 
 
 def run_sealed(fn):

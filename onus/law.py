@@ -36,6 +36,24 @@ def load_rules():
     return out
 
 
+def constants(rules=None):
+    """The gate's numbers come from Muse's reading of the Act, not from any codebase.
+    Parsed from the verified verbatim quotes; refuses to run if a quote is unverified or missing."""
+    rules = rules or load_rules()
+    q = {r["id"]: r for r in rules}
+    need = ["1068-G12", "1068-G15", "1068-G16"]
+    for rid in need:
+        if rid not in q or not q[rid]["verified"]:
+            raise RuntimeError(f"rule {rid} missing or not verified against the Act; the gate will not run")
+    money = lambda s: [float(x.replace(",", "")) for x in re.findall(r"\$([0-9][0-9,]*(?:\.[0-9]+)?)", s)]
+    pct = lambda s: [float(x) / 100 for x in re.findall(r"([0-9]+(?:\.[0-9]+)?)%", s)]
+    return {"FREE_AREA": money(q["1068-G12"]["quote"])[0],          # "ordinary income free area is $100"
+            "LOWER_RATE": pct(q["1068-G15"]["quote"])[0],           # "50% of the part ... that does not exceed $150"
+            "LOWER_BAND": money(q["1068-G15"]["quote"])[0],
+            "UPPER_RATE": pct(q["1068-G16"]["quote"])[0],           # "60% of the part ... that exceeds $150"
+            "source": {rid: {"page": q[rid]["page"], "quote": q[rid]["quote"]} for rid in need}}
+
+
 def page_text(page_numbers):
     pages = _pages()
     return {p: pages.get(p, "")[:6000] for p in page_numbers}
