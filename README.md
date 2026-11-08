@@ -1,5 +1,25 @@
 # ONUS: the burden of proof is on the code
 
+**Repo:** https://github.com/elsisiem/onus · **Demo video:** `docs/onus_demo_60s.mp4`
+
+## Quick start (for a human coder)
+```bash
+git clone https://github.com/elsisiem/onus && cd onus
+python3 -m venv .venv && .venv/bin/pip install cryptography
+cp .env.example .env            # add META_API_KEY, SUBQ_API_KEY, GEMINI_API_KEY
+.venv/bin/python server.py      # open http://127.0.0.1:8787
+.venv/bin/python tools/verify.py evidence/last_certificate.json   # check a signed certificate
+openssl ts -reply -in law/sealed_suite.tsr -text                  # see the RFC 3161 timestamp
+```
+Layout: `onus/law.py` (Act rules + constants parsed from Muse's verified quotes) · `onus/oracle.py` (statute oracle, sealed suite, twin test) · `onus/models.py` (SubQ Snap + Muse calls) · `onus/live_pr.py` (live Gemini PRs + their own tests) · `prs/` (planted misreadings) · `ui/index.html` · `server.py`.
+
+## Why each sponsor is load-bearing
+| Sponsor | What it does in ONUS | Without it |
+|---|---|---|
+| **Meta Muse Spark** | Reads the 828-page Act in one call and returns each rule with page and verbatim quote. The gate's constants are **parsed from those quotes** | No verified rules, so `law.constants()` refuses and the gate cannot run |
+| **SubQ Snap** | Blind clause map: names which rule a diff rewrote, and whether the PR description hid the change, in under a second. Triage can flag ASK-A-LAWYER | Tests say *that* something failed, not *which law* or *who must act*. A disclosed policy change and a silent defect look identical |
+| **Google Gemini** | Independent red team: writes real PRs from tickets **plus its own unit tests**, which run as the implementer's CI | The gate is only tested against bugs we imagined ourselves |
+
 **CI was green. The law wasn’t.** ONUS is a merge gate for AI-written changes to code that implements law. Its only source of truth is the statute.
 
 Built solo at the AIE Code Summit 2026 Hackathon (Cerebral Valley, SF) for **Trust but Verify**: an independent verifier that writes its own tests without the implementer’s blind spots, stays reproducible, is hard to game, and blocks what’s below the standard.
