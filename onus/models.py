@@ -77,10 +77,10 @@ def snap_decide(rules, pr, divergence):
 
 def muse_ask(claim, rules, pages):
     """Muse Spark answers a judge's claim against the extracted rules + the cited pages of the Act."""
-    ctx = "\n\n".join(f"=== PDF PAGE {p} ===\n{t}" for p, t in pages.items())
+    # Stage speed: the rules' quotes are already verified verbatim against the Act text, so they are the context (~4 s).
     rl = "\n".join(f"- {r['id']} (p.{r['page']}): {r['quote']}" for r in rules)
     prompt = (f"You are checking a claim against Australia's Social Security Act 1991 (vol. 3, compilation 147).\n"
-              f"Extracted rules:\n{rl}\n\nPages of the Act:\n{ctx}\n\nCLAIM: {claim}\n\n"
+              f"Rules extracted from the Act, each quote verified verbatim against the text:\n{rl}\n\nCLAIM: {claim}\n\n"
               "Answer ONLY with JSON: {\"verdict\": \"CONFIRMED\"|\"REFUTED\"|\"NOT IN EVIDENCE\", \"rule_id\": ..., \"page\": <int>, "
               "\"quote\": <verbatim supporting text, <=200 chars>}. Use NOT IN EVIDENCE if these pages do not settle it.")
     resp, ms = _post("https://api.meta.ai/v1/chat/completions", {"Authorization": f"Bearer {ENV['META_API_KEY']}"},

@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ONUS — Merge Gate</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cpath d=%22M2 2h9v9H2zM13 11V2a9 9 0 0 1 9 9zM2 13h9a9 9 0 0 1-9 9z%22 fill=%22%23888%22/%3E%3Crect x=%2213%22 y=%2213%22 width=%229%22 height=%229%22 fill=%22%23E8EC9A%22/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://api.fontshare.com">
 <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -82,7 +83,7 @@ main.press{animation:press .08s steps(1)}
 .btn:active{transform:translateY(1px)}
 .btn.primary{background:var(--butter); color:var(--butter-ink); border-color:transparent}
 .btn.primary:hover{background:var(--butter); filter:brightness(.96)}
-.btn.sm{padding:9px 13px; font-size:14px}
+.btn.sm{padding:9px 13px; font-size:14px; white-space:nowrap}
 .btn svg{width:16px; height:16px}
 .btn:focus-visible{outline:2px solid var(--butter); outline-offset:2px}
 .btn[disabled]{opacity:.5; cursor:progress}
@@ -155,7 +156,7 @@ h1{font-weight:400; font-size:clamp(44px, 5.6vw, 72px); line-height:1; letter-sp
 .band .count{font-size:104px; font-weight:400; letter-spacing:-.05em; line-height:.9; font-variant-numeric:tabular-nums; white-space:nowrap}
 .band .count.bad{color:var(--signal)}
 .band .count small{font-size:34px; color:var(--ink-3); letter-spacing:-.03em}
-.band .verdict{font-size:clamp(38px,5.4vw,76px); font-weight:400; letter-spacing:-.06em; line-height:.95; overflow:hidden; white-space:nowrap; text-overflow:clip}
+.band .verdict{font-size:clamp(34px,4.5vw,66px); font-weight:400; letter-spacing:-.06em; line-height:.95; overflow:hidden; white-space:nowrap; text-overflow:clip}
 .v-bad{color:var(--signal)} .v-ok{color:var(--ink)} .v-abs{color:var(--frost)}
 .band .meta{margin-top:10px}
 
@@ -164,7 +165,7 @@ h1{font-weight:400; font-size:clamp(44px, 5.6vw, 72px); line-height:1; letter-sp
 .pane{border-right:1px solid var(--line); min-width:0; display:flex; flex-direction:column}
 .pane:last-child{border-right:0}
 .pane-h{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:13px 16px; border-bottom:1px solid var(--line); background:var(--bg-2)}
-.pane-h h3{margin:0; font-size:19px; font-weight:500; letter-spacing:-.02em}
+.pane-h h3{margin:0; white-space:nowrap; font-size:19px; font-weight:500; letter-spacing:-.02em}
 .pane-h .label{text-align:right}
 .pane-b{padding:12px 16px 16px; flex:1}
 .sub-h{margin:18px 0 8px; display:flex; justify-content:space-between; gap:10px; align-items:baseline}
@@ -197,15 +198,16 @@ h1{font-weight:400; font-size:clamp(44px, 5.6vw, 72px); line-height:1; letter-sp
 .notice .amt{font-family:var(--font-mono); font-size:24px; font-weight:700; margin:8px 0; font-variant-numeric:tabular-nums}
 .notice.void{opacity:.55}
 .stamp{position:absolute; left:50%; top:54%; transform:translate(-50%,-50%) rotate(-17deg); border:4px solid var(--signal); color:var(--signal);
-  font-family:var(--font-mono); font-weight:700; font-size:21px; letter-spacing:.08em; padding:8px 12px; white-space:nowrap; opacity:0; pointer-events:none; background:color-mix(in oklab, var(--paper) 65%, transparent)}
+  font-family:var(--font-mono); font-weight:700; font-size:22px; line-height:1.1; letter-spacing:.06em; padding:8px 12px; white-space:pre-line; text-align:center; width:max-content; opacity:0; pointer-events:none; background:color-mix(in oklab, var(--paper) 65%, transparent)}
 .stamp.frost{border-color:#3B5A6E; color:#3B5A6E} .stamp.ok{border-color:#56620A; color:#56620A}
 .stamp.on{animation:stampin .14s steps(2) forwards}
 @keyframes stampin{0%{opacity:1; transform:translate(-50%,-50%) rotate(-17deg) scale(1.35)} 100%{opacity:.92; transform:translate(-50%,-50%) rotate(-17deg) scale(1)}}
 .lawful{border:1px solid var(--line-2); padding:14px; display:flex; flex-direction:column; gap:6px; background:var(--panel)}
 .lawful .big{font-size:44px; font-weight:400; letter-spacing:-.05em; line-height:1; font-variant-numeric:tabular-nums}
 .lawful .pr-big{font-size:26px; letter-spacing:-.04em; line-height:1; font-variant-numeric:tabular-nums}
-.twin{border:1px solid var(--line); margin-top:12px; padding:12px 14px; display:grid; grid-template-columns: 160px 1fr; gap:14px; align-items:center}
-.twin svg{width:100%; height:54px; display:block}
+.twin{border:1px solid var(--line); margin-top:12px; padding:12px 14px}
+.twin .twin-svg{width:100%; height:56px; display:block; margin:6px 0 10px}
+.twin-pair{display:grid; grid-template-columns:1fr 1fr; gap:14px}
 .twin p{margin:0; font-size:15px; line-height:1.4}
 .twin p b{font-weight:500}
 .snap{margin-top:12px; border:1px solid var(--line); padding:12px 14px; background:var(--bg-2)}
@@ -213,7 +215,8 @@ h1{font-weight:400; font-size:clamp(44px, 5.6vw, 72px); line-height:1; letter-sp
 .snap .kv{font-family:var(--font-mono); font-size:13px; color:var(--ink-2)}
 .snap .kv b{color:var(--ink); font-weight:500}
 .post{display:grid; gap:6px; margin-top:10px}
-.post .r{display:grid; grid-template-columns: 130px 1fr 44px; gap:10px; align-items:center; font-family:var(--font-mono); font-size:12.5px}
+.post .r > span:first-child{overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.post .r{display:grid; grid-template-columns: 172px 1fr 40px; gap:10px; align-items:center; font-family:var(--font-mono); font-size:12.5px}
 .post .track{height:9px; background:var(--panel-2); position:relative; overflow:hidden}
 .post .fill{position:absolute; inset:0 auto 0 0; background:var(--ink-3); transition: width .6s var(--ease-step)}
 .post .r.win .fill{background:var(--butter)}
@@ -389,7 +392,7 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
             <div class="wm"><span>Synthetic · not a real notice</span><span id="noticeRef">ref —</span></div>
             <h4>Notice of debt</h4>
             <div class="body" id="noticeBody">No run yet.</div>
-            <div class="stamp" id="stamp">WOULD HAVE BEEN SENT</div>
+            <div class="stamp" id="stamp"></div>
           </div>
           <div class="lawful" id="lawful">
             <span class="label">The PR says</span><span class="pr-big" id="prAmt">—</span>
@@ -398,7 +401,7 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
           </div>
         </div>
         <div class="twin" id="twin">
-          <div><div class="label" style="margin-bottom:4px">The twin</div><svg id="twinSvg" viewBox="0 0 260 54" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+          <div class="twin-pair"><div><div class="label" id="meLbl">This life</div><svg id="meSvg" class="twin-svg" viewBox="0 0 260 54" preserveAspectRatio="none" aria-hidden="true"></svg></div><div><div class="label">The twin</div><svg id="twinSvg" class="twin-svg" viewBox="0 0 260 54" preserveAspectRatio="none" aria-hidden="true"></svg></div></div>
           <p id="twinText" class="muted">The twin appears after a run.</p>
         </div>
         <div class="snap" id="snap" data-section="snap">
@@ -735,7 +738,7 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
     }
     st.className = 'stamp';
     if (L.would_send) {
-      st.textContent = route === 'BLOCK' ? 'WOULD HAVE BEEN SENT' : route === 'ASK' ? 'HELD FOR REVIEW' : 'CLEARED BY ONUS';
+      st.textContent = route === 'BLOCK' ? 'WOULD HAVE\nBEEN SENT' : route === 'ASK' ? 'HELD FOR\nREVIEW' : 'CLEARED\nBY ONUS';
       if (route === 'ASK') st.classList.add('frost'); else if (route !== 'BLOCK') st.classList.add('ok');
       void st.offsetWidth; st.classList.add('on');
     }
@@ -748,7 +751,7 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
   }
 
   function sparkSvg(earned, on) {
-    const w = 260 / N; let out = '';
+    const w = 260 / N; let out = '<rect x="0" y="46" width="260" height="1" fill="var(--line-2)"/>';
     for (let i = 0; i < N; i++) {
       const h = Math.min(1, (earned[i] || 0) / MAX) * 44;
       if (on && on[i]) out += `<rect x="${i * w}" y="0" width="${w - 1.5}" height="46" fill="var(--onb)"/>`;
@@ -761,6 +764,8 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
     const t = r.twin;
     if (!t) { $('#twinSvg').innerHTML = ''; $('#twinText').className = 'muted'; $('#twinText').textContent = 'No twin for this run.'; return; }
     $('#twinSvg').innerHTML = sparkSvg(t.earned || [], t.on_benefit || []);
+    $('#meSvg').innerHTML = sparkSvg(state.earned, state.on);
+    $('#meLbl').textContent = state.preset === 'sara' ? 'Sara' : 'This life';
     const who = state.preset ? `${PRESET_NAME[state.preset]}’s` : 'This person’s';
     const tl = t.lawful || {}, me = r.lawful || {};
     const tAmt = statusText(tl) || money(tl.debt), mAmt = statusText(me) || money(me.debt);
@@ -790,7 +795,7 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
     const fam = {}; fails.forEach(f => fam[f.family] = (fam[f.family] || 0) + 1);
     $('#sealed').innerHTML = `Sealed suite <b>${esc((sd.hash || '').replace(/^sha256[:-]?/, '').slice(0, 12))}</b>… · sealed <b>${esc(fmtTime(sd.sealed_at))}</b> · <b>${sd.n_tests ?? '?'}</b> tests<br>
       ${fails.length ? `<span style="color:var(--signal)">${fails.length} failed</span> · ${Object.entries(fam).map(([k, n]) => `${esc(k)} ×${n}`).join(' · ')}` : '<span>0 failed</span>'}
-      ${fails.length ? `<div class="fails">${fails.slice(0, 4).map(f => `<div><span class="chip bad">${esc(f.family)}</span><span title="${esc(f.detail)}">${esc(f.id)} · ${esc(f.detail)}</span></div>`).join('')}</div>` : ''}`;
+      ${fails.length ? `<div class="fails">${fails.slice(0, 4).map(f => `<div><span class="chip bad">${esc(f.family)}</span><span title="${esc(f.detail)}">${esc(f.id)} · ${esc(f.detail)}</span></div>`).join('')}${fails.length > 4 ? `<div><span></span><span>+${fails.length - 4} more failed</span></div>` : ''}</div>` : ''}`;
   }
 
   /* ---------- red team ---------- */

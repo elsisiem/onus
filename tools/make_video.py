@@ -12,12 +12,11 @@ FF = imageio_ffmpeg.get_ffmpeg_exe()
 
 # (seconds, js to run before the shot, narration line)
 SHOTS = [
-    (8, "window.scrollTo(0,0)", "From 2015 to 2019, Australia's Robodebt averaged people's yearly income across fortnights, and sent four hundred and seventy thousand debts the law did not allow."),
-    (8, "window.scrollTo(0,0)", "Code like that is about to be written by AI agents, and their tests share their mistakes. CI was green. The law wasn't."),
-    (9, "document.querySelector('[data-section=act]')?.scrollIntoView({block:'start'})", "ONUS reads the statute first. Meta's Muse Spark read all eight hundred and twenty eight pages of the Social Security Act in one call, and every quote is checked against the text."),
-    (9, "document.querySelector('[data-section=letter]')?.scrollIntoView({block:'start'})", "Draw a person's year. This pull request would mail Sara a four thousand eight hundred and seventy five dollar debt. Under the law she owes nothing, and her twin, with identical inputs, owes something else entirely."),
-    (9, "document.querySelector('[data-section=snap]')?.scrollIntoView({block:'start'})", "SubQ Snap decides in under half a second which clause the change rewrites, that the description hid the change, and that it is a statute defect. Blocked."),
-    (9, "document.querySelector('[data-section=cert]')?.scrollIntoView({block:'start'})", "Gemini wrote the red team. The repo's own tests caught zero of three. ONUS caught three of three, and signs a certificate."),
+    (8, "window.scrollTo(0,0)", "Robodebt averaged people's income, and sent four hundred and seventy thousand unlawful debts. AI will write code like that next. CI was green. The law wasn't."),
+    (9, "document.querySelector('[data-section=act]')?.scrollIntoView({block:'start'})", "ONUS reads the law first. Meta's Muse read all 828 pages of the Act in one call, every quote verified."),
+    (9, "document.querySelector('[data-section=letter]')?.scrollIntoView({block:'start'})", "This pull request would mail Sara a debt of $4,875. The law says zero. Her twin has identical inputs and a different lawful debt."),
+    (9, "document.querySelector('[data-section=snap]')?.scrollIntoView({block:'start'})", "SubQ Snap names the clause, catches the undisclosed change, and blocks it, in under half a second."),
+    (9, "document.querySelector('[data-section=cert]')?.scrollIntoView({block:'start'})", "Gemini's red team: repo tests caught zero of three. ONUS caught three of three, and signs it."),
     (6, "window.scrollTo(0,0)", "ONUS. The burden of proof is on the code."),
 ]
 
@@ -45,7 +44,14 @@ def tts(text, path):
             "generationConfig": {"responseModalities": ["AUDIO"], "speechConfig": {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": "Kore"}}}}}
     req = urllib.request.Request("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash-tts:generateContent",
                                  data=json.dumps(body).encode(), headers={"Content-Type": "application/json", "x-goog-api-key": env["GEMINI_API_KEY"]})
-    part = json.load(urllib.request.urlopen(req, timeout=90))["candidates"][0]["content"]["parts"][0]["inlineData"]
+    for attempt in range(5):
+        try:
+            part = json.load(urllib.request.urlopen(req, timeout=90))["candidates"][0]["content"]["parts"][0]["inlineData"]
+            break
+        except Exception as e:
+            print("tts retry", attempt + 1, repr(e)[:80]); time.sleep(2 + attempt * 2)
+    else:
+        raise RuntimeError("TTS failed after retries")
     raw = base64.b64decode(part["data"])
     if raw[:4] == b"RIFF":
         open(path, "wb").write(raw)
@@ -66,7 +72,7 @@ def main():
         wav = os.path.join(OUT, f"s{i}.wav"); tts(line, wav)
         seg = os.path.join(OUT, f"s{i}.mp4")
         subprocess.run([FF, "-hide_banner", "-loglevel", "error", "-y", "-loop", "1", "-i", png, "-i", wav,
-                        "-filter_complex", "[1:a]apad=pad_dur=0.6[a]", "-map", "0:v", "-map", "[a]", "-shortest",
+                        "-filter_complex", "[1:a]atempo=1.12,apad=pad_dur=0.4[a]", "-map", "0:v", "-map", "[a]", "-shortest",
                         "-r", "30", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "aac", seg], check=True)
         segs.append(seg); print("segment", i, "ok")
     lst = os.path.join(OUT, "list.txt"); open(lst, "w").write("".join(f"file '{s}'\n" for s in segs))
