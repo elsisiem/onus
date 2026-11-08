@@ -43,7 +43,7 @@ def generate(ticket_id, key):
 
 
 def run_own_tests(d):
-    p = subprocess.run([sys.executable, "-I", "-m", "unittest", "-q", "test_impl"], cwd=d, capture_output=True, text=True, timeout=20)
+    p = subprocess.run([sys.executable, "-E", "-m", "unittest", "-q", "test_impl"], cwd=d, capture_output=True, text=True, timeout=20)
     tail = (p.stderr or p.stdout).strip().splitlines()[-1:] or [""]
     return {"status": "pass" if p.returncode == 0 else "fail", "summary": tail[0][:160]}
 
