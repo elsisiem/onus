@@ -4,50 +4,52 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ONUS — The Registry</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cstyle%3E.s%7Bstroke:%2314161B%7D@media (prefers-color-scheme:dark)%7B.s%7Bstroke:%23ECE7DB%7D%7D%3C/style%3E%3Cg class='s' fill='none' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 10.6L22 13.4'/%3E%3Cpath d='M12 13L8.2 20.5H15.8Z'/%3E%3Cpath d='M6 21.5H18'/%3E%3C/g%3E%3Crect x='17' y='7.05' width='5' height='5' fill='%23C2361B' transform='rotate(8 19.5 12.05)'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cstyle%3E.s%7Bstroke:%231A1916%7D@media (prefers-color-scheme:dark)%7B.s%7Bstroke:%23EEEAE2%7D%7D%3C/style%3E%3Cg class='s' fill='none' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 10.6L22 13.4'/%3E%3Cpath d='M12 13L8.2 20.5H15.8Z'/%3E%3Cpath d='M6 21.5H18'/%3E%3C/g%3E%3Crect x='17' y='7.05' width='5' height='5' fill='%23B5381F' transform='rotate(8 19.5 12.05)'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ONUS — The Registry. A court registry for code: civic, exact, plain-spoken. Fraunces / Public Sans / IBM Plex Mono. */
+/* ONUS — The Registry. A court registry for code: civic, exact, plain-spoken. Satoshi / IBM Plex Mono. Colour carries meaning only: clay = violation, sage = lawful, ochre = cannot determine. */
 :root{
-  --font-sans: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Satoshi", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-serif: "Fraunces", ui-serif, Georgia, serif;
+  --font-serif: "Satoshi", ui-sans-serif, system-ui, sans-serif;
   --ease-step: cubic-bezier(.23,1,.32,1);
   --dur-step: .24s;
   --gutter: 16px;
   --r: 4px;
   /* the letter is paper in both themes */
-  --paper:#F5F2EA; --paper-ink:#14161B; --paper-line:#D8D0C0; --paper-seal:#C2361B; --paper-amber:#A86A12; --paper-green:#1F7A4D;
+  --paper:#F7F5F0; --paper-ink:#1A1916; --paper-line:#DDD7CB; --paper-seal:#B5381F; --paper-amber:#94600F; --paper-green:#2E6B47;
 }
 /* Night */
 :root, :root[data-theme="dark"]{
-  --bg:#0C111C; --bg-2:#0F1522; --panel:#121A29; --panel-2:#18223A; --panel-3:#26324C;
-  --line:#26324C; --line-2:#3A4868;
-  --ink:#ECE7DB; --ink-2:#A9B0C0; --ink-3:#7A849C;
-  --seal:#FF6A4D; --cobalt:#8AA9FF; --green:#5CC48D; --amber:#F2B94B;
-  --on-seal:#0C111C; --on-cobalt:#0C111C; --on-green:#0C111C;
-  --bar:#56627F; --onb: color-mix(in oklab, #8AA9FF 12%, transparent);
+  --bg:#111110; --bg-2:#161614; --panel:#1B1A18; --panel-2:#22211E; --panel-3:#33312C;
+  --line:#2A2925; --line-2:#3F3C36;
+  --ink:#EEEAE2; --ink-2:#B4AEA2; --ink-3:#868174;
+  --seal:#EE6E50; --cobalt:#E4DDCF; --green:#82C79D; --amber:#E6B04E;
+  --on-seal:#111110; --on-cobalt:#111110; --on-green:#111110;
+  --bar:#4B4842; --onb: color-mix(in oklab, #E4DDCF 7%, transparent);
   --signal: var(--seal); --frost: var(--amber);
   color-scheme: dark;
 }
 /* Day */
 :root[data-theme="light"]{
-  --bg:#F5F2EA; --bg-2:#F0ECE2; --panel:#ECE7DC; --panel-2:#E3DDCF; --panel-3:#CFC6B4;
-  --line:#D8D0C0; --line-2:#B8AE9B;
-  --ink:#14161B; --ink-2:#4A4F5C; --ink-3:#747884;
-  --seal:#C2361B; --cobalt:#2747C9; --green:#1F7A4D; --amber:#A86A12;
-  --on-seal:#F5F2EA; --on-cobalt:#F5F2EA; --on-green:#F5F2EA;
-  --bar:#9C9A93; --onb: color-mix(in oklab, #2747C9 9%, transparent);
+  --bg:#F7F5F0; --bg-2:#F1EEE7; --panel:#EBE7DE; --panel-2:#E2DDD2; --panel-3:#CCC5B6;
+  --line:#DDD7CB; --line-2:#BDB5A5;
+  --ink:#1A1916; --ink-2:#4E4B44; --ink-3:#7C776C;
+  --seal:#B5381F; --cobalt:#1A1916; --green:#2E6B47; --amber:#94600F;
+  --on-seal:#F7F5F0; --on-cobalt:#F7F5F0; --on-green:#F7F5F0;
+  --bar:#A8A398; --onb: color-mix(in oklab, #1A1916 6%, transparent);
   --signal: var(--seal); --frost: var(--amber);
   color-scheme: light;
 }
 @media (prefers-color-scheme: light){
   :root:not([data-theme]){
-    --bg:#F5F2EA; --bg-2:#F0ECE2; --panel:#ECE7DC; --panel-2:#E3DDCF; --panel-3:#CFC6B4; --line:#D8D0C0; --line-2:#B8AE9B;
-    --ink:#14161B; --ink-2:#4A4F5C; --ink-3:#747884; --seal:#C2361B; --cobalt:#2747C9; --green:#1F7A4D; --amber:#A86A12;
-    --on-seal:#F5F2EA; --on-cobalt:#F5F2EA; --on-green:#F5F2EA; --bar:#9C9A93; --onb: color-mix(in oklab, #2747C9 9%, transparent); color-scheme: light;
+    --bg:#F7F5F0; --bg-2:#F1EEE7; --panel:#EBE7DE; --panel-2:#E2DDD2; --panel-3:#CCC5B6; --line:#DDD7CB; --line-2:#BDB5A5;
+    --ink:#1A1916; --ink-2:#4E4B44; --ink-3:#7C776C; --seal:#B5381F; --cobalt:#1A1916; --green:#2E6B47; --amber:#94600F;
+    --on-seal:#F7F5F0; --on-cobalt:#F7F5F0; --on-green:#F7F5F0; --bar:#A8A398; --onb: color-mix(in oklab, #1A1916 6%, transparent); color-scheme: light;
   }
 }
 *{box-sizing:border-box}
@@ -69,7 +71,7 @@ main.press{animation:press .08s steps(1)}
 .bar .wrap{display:flex; align-items:center; gap:20px; height:60px}
 .brand{display:flex; align-items:center; gap:10px}
 .brand svg{width:26px; height:26px; color:var(--ink)}
-.brand .word{font-family:var(--font-serif); font-weight:700; font-size:24px; letter-spacing:.02em; line-height:1; font-variation-settings:"opsz" 72}
+.brand .word{font-family:var(--font-serif); font-weight:700; font-size:24px; letter-spacing:.02em; line-height:1}
 .brand small{font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; color:var(--ink-3); text-transform:uppercase; font-weight:400; padding-left:10px; border-left:1px solid var(--line)}
 .leds{display:flex; gap:16px; margin-left:auto; align-items:center}
 .led{display:flex; align-items:center; gap:7px}
@@ -103,7 +105,7 @@ main.press{animation:press .08s steps(1)}
 .docket{display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-2);
   border:1px solid var(--line-2); border-radius:var(--r); padding:3px 8px; margin-bottom:12px}
 .docket b{color:var(--cobalt); font-weight:600}
-h1{font-family:var(--font-serif); font-weight:600; font-size:clamp(44px, 5.6vw, 74px); line-height:1; letter-spacing:-.025em; margin:14px 0 18px; max-width:12ch; font-variation-settings:"opsz" 144}
+h1{font-family:var(--font-serif); font-weight:600; font-size:clamp(44px, 5.6vw, 74px); line-height:1; letter-spacing:-.025em; margin:14px 0 18px; max-width:12ch}
 h1 em{font-style:italic; font-weight:600; color:var(--seal)}
 .lede{color:var(--ink-2); font-size:19px; line-height:1.5; max-width:38ch; margin:0 0 24px}
 .cta{display:flex; gap:12px; flex-wrap:wrap}
@@ -163,14 +165,12 @@ h1 em{font-style:italic; font-weight:600; color:var(--seal)}
 
 /* Verdict band */
 .band{display:grid; grid-template-columns: auto 1fr; gap:44px; align-items:end; border-top:3px double var(--line-2); border-bottom:3px double var(--line-2);
-  padding:22px 0 18px 22px; position:relative; margin-top:8px; transition:opacity .2s}
-.band::before{content:""; position:absolute; left:0; top:10px; bottom:10px; width:3px; border-radius:2px; background:var(--green)}
-.band.k-bad::before{background:var(--seal)} .band.k-abs::before{background:var(--amber)}
+  padding:22px 0 18px 0; position:relative; margin-top:8px; transition:opacity .2s}
 .band.pending{opacity:.6}
-.band .count{font-family:var(--font-serif); font-size:104px; font-weight:600; letter-spacing:-.03em; line-height:.9; font-variant-numeric:tabular-nums lining-nums; white-space:nowrap; font-variation-settings:"opsz" 144}
+.band .count{font-family:var(--font-serif); font-size:104px; font-weight:600; letter-spacing:-.03em; line-height:.9; font-variant-numeric:tabular-nums lining-nums; white-space:nowrap}
 .band .count.bad{color:var(--seal)}
 .band .count small{font-size:32px; font-weight:500; color:var(--ink-3); letter-spacing:-.01em}
-.band .verdict{font-family:var(--font-serif); font-size:clamp(34px,4.5vw,64px); font-weight:700; letter-spacing:-.02em; line-height:.95; overflow:hidden; white-space:nowrap; text-overflow:clip; font-variation-settings:"opsz" 144}
+.band .verdict{font-family:var(--font-serif); font-size:clamp(34px,4.5vw,64px); font-weight:700; letter-spacing:-.02em; line-height:.95; overflow:hidden; white-space:nowrap; text-overflow:clip}
 .v-bad{color:var(--seal)} .v-ok{color:var(--green)} .v-abs{color:var(--amber)} .v-wait{color:var(--ink-3); font-weight:500; font-style:italic}
 .band .meta{margin-top:10px}
 
@@ -184,13 +184,13 @@ h1 em{font-style:italic; font-weight:600; color:var(--seal)}
 .pane-b{padding:12px 16px 16px; flex:1}
 .sub-h{margin:18px 0 8px; display:flex; justify-content:space-between; gap:10px; align-items:baseline}
 
-.rule{display:grid; grid-template-columns: 18px 1fr; gap:10px; align-items:start; padding:12px 0 12px 8px; border-bottom:1px solid var(--line); position:relative}
+.rule{display:grid; grid-template-columns: 18px 1fr; gap:10px; align-items:start; padding:12px 8px; border-bottom:1px solid var(--line); position:relative}
 .rule:last-child{border-bottom:0}
 .rule .ic svg{width:16px; height:16px; margin-top:3px}
 .rule .rid{font-family:var(--font-mono); font-size:13.5px; font-weight:600; color:var(--ink)}
 .rule .q{font-size:14.5px; color:var(--ink-2); margin-top:3px; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden}
 .rule .chips{display:flex; gap:6px; flex-wrap:wrap; margin-top:7px; align-items:center}
-.rule.touched::before{content:""; position:absolute; left:0; top:8px; bottom:8px; width:3px; border-radius:2px; background:var(--seal)}
+.rule.touched{background:color-mix(in oklab, var(--seal) 7%, transparent)}
 .rule.flash{animation:flash 1.3s var(--ease-step)}
 @keyframes flash{0%{background:color-mix(in oklab, var(--seal) 26%, transparent)} 100%{background:transparent}}
 .chip{font-family:var(--font-mono); font-size:11.5px; letter-spacing:.04em; padding:2px 7px; border:1px solid var(--line-2); border-radius:3px; color:var(--ink-2); white-space:nowrap; display:inline-block}
@@ -208,8 +208,7 @@ h1 em{font-style:italic; font-weight:600; color:var(--seal)}
 
 /* The letter: paper in both themes, with a margin line */
 .letters{display:grid; grid-template-columns: 1.45fr 1fr; gap:12px; align-items:stretch}
-.notice{position:relative; background:var(--paper); color:var(--paper-ink); padding:16px 16px 18px 40px; overflow:hidden; border:1px solid var(--paper-line); border-radius:var(--r); min-height:250px}
-.notice::before{content:""; position:absolute; left:28px; top:0; bottom:0; border-left:1px solid var(--paper-seal); opacity:.55}
+.notice{position:relative; background:var(--paper); color:var(--paper-ink); padding:16px 18px 18px; overflow:hidden; border:1px solid var(--paper-line); border-radius:var(--r); min-height:250px}
 .notice .wm{font-family:var(--font-mono); font-size:10px; letter-spacing:.12em; color:#747884; text-transform:uppercase; display:flex; justify-content:space-between; gap:10px; padding-bottom:6px; border-bottom:3px double var(--paper-line)}
 .notice h4{font-family:var(--font-serif); font-weight:600; font-size:30px; line-height:1; margin:16px 0 10px; letter-spacing:-.01em}
 .notice .body{font-family:var(--font-sans); font-size:13.5px; line-height:1.55}
@@ -228,7 +227,7 @@ h1 em{font-style:italic; font-weight:600; color:var(--seal)}
 .twin-pair{display:grid; grid-template-columns:1fr 1fr; gap:14px}
 .twin p{margin:0; font-size:15px; line-height:1.45}
 .twin p b{font-weight:600}
-.snap{margin-top:12px; border:1px solid var(--line); border-left:3px solid var(--cobalt); border-radius:var(--r); padding:12px 14px; background:var(--bg-2)}
+.snap{margin-top:12px; border:1px solid var(--line); border-radius:var(--r); padding:12px 14px; background:var(--bg-2)}
 .snap .row{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:8px}
 .snap .kv{font-family:var(--font-mono); font-size:13px; color:var(--ink-2)}
 .snap .kv b{color:var(--ink); font-weight:600}
@@ -269,7 +268,7 @@ h1 em{font-style:italic; font-weight:600; color:var(--seal)}
 .testimony input:focus{outline:2px solid var(--cobalt); outline-offset:-2px}
 .examples{display:flex; gap:6px; flex-wrap:wrap; margin-top:8px}
 .answer{margin-top:10px; font-size:14px; min-height:24px}
-.answer blockquote{margin:10px 0 0; padding:8px 12px; border-left:3px double var(--cobalt); font-family:var(--font-serif); font-style:italic; font-size:18px; line-height:1.35; color:var(--ink)}
+.answer blockquote{margin:10px 0 0; padding:8px 12px; border-left:1px solid var(--line-2); font-family:var(--font-serif); font-size:18px; line-height:1.35; color:var(--ink)}
 .ico{fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round}
 footer{border-top:3px double var(--line-2); padding:18px 0 40px; color:var(--ink-3); font-size:14px; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap}
 .spin{display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--ink-3); animation:blink .6s steps(1) infinite; vertical-align:0; margin-right:6px}
@@ -303,8 +302,8 @@ footer{border-top:3px double var(--line-2); padding:18px 0 40px; color:var(--ink
       </g>
       <rect class="logo-live" x="17" y="7.05" width="5" height="5" fill="var(--seal)" transform="rotate(8 19.5 12.05)"/>
     </symbol>
-    <symbol id="i-observed" viewBox="0 0 16 16"><text x="8" y="13.2" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-weight="700" font-size="15" fill="currentColor">§</text></symbol>
-    <symbol id="i-inferred" viewBox="0 0 16 16"><text x="8" y="13.2" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-weight="700" font-size="15" fill="none" stroke="currentColor" stroke-width=".8">§</text></symbol>
+    <symbol id="i-observed" viewBox="0 0 16 16"><text x="8" y="13.2" text-anchor="middle" font-family="Satoshi, system-ui, sans-serif" font-weight="700" font-size="15" fill="currentColor">§</text></symbol>
+    <symbol id="i-inferred" viewBox="0 0 16 16"><text x="8" y="13.2" text-anchor="middle" font-family="Satoshi, system-ui, sans-serif" font-weight="700" font-size="15" fill="none" stroke="currentColor" stroke-width=".8">§</text></symbol>
     <symbol id="i-arrow" viewBox="0 0 16 16"><path class="ico" d="M2 8h11M9 4l4 4-4 4"/></symbol>
     <symbol id="i-stage" viewBox="0 0 16 16"><rect class="ico" x="1.5" y="2.5" width="13" height="9" rx="1.5"/><path class="ico" d="M5 14.5h6M8 11.5v3"/></symbol>
     <symbol id="i-probe" viewBox="0 0 16 16"><path class="ico" d="M8 1v4M8 11v4M1 8h4M11 8h4"/><circle cx="8" cy="8" r="1.8" fill="currentColor"/></symbol>
