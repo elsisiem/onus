@@ -3,47 +3,51 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ONUS — Merge Gate</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cpath d=%22M2 2h9v9H2zM13 11V2a9 9 0 0 1 9 9zM2 13h9a9 9 0 0 1-9 9z%22 fill=%22%23888%22/%3E%3Crect x=%2213%22 y=%2213%22 width=%229%22 height=%229%22 fill=%22%23E8EC9A%22/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://api.fontshare.com">
-<link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
+<title>ONUS — The Registry</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cstyle%3E.s%7Bstroke:%2314161B%7D@media (prefers-color-scheme:dark)%7B.s%7Bstroke:%23ECE7DB%7D%7D%3C/style%3E%3Cg class='s' fill='none' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 10.6L22 13.4'/%3E%3Cpath d='M12 13L8.2 20.5H15.8Z'/%3E%3Cpath d='M6 21.5H18'/%3E%3C/g%3E%3Crect x='17' y='7.05' width='5' height='5' fill='%23C2361B' transform='rotate(8 19.5 12.05)'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ONUS — built on the Assay Office design system (Satoshi, olive greys, butter, square geometry, matte LEDs, one signal colour) */
+/* ONUS — The Registry. A court registry for code: civic, exact, plain-spoken. Fraunces / Public Sans / IBM Plex Mono. */
 :root{
-  --font-sans: "Satoshi", "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-sans: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-serif: "Fraunces", ui-serif, Georgia, serif;
   --ease-step: cubic-bezier(.23,1,.32,1);
   --dur-step: .24s;
   --gutter: 16px;
-  --paper:#F4F2E8; --paper-ink:#1A1A16; --paper-line:#CFCCBD;
+  --r: 4px;
+  /* the letter is paper in both themes */
+  --paper:#F5F2EA; --paper-ink:#14161B; --paper-line:#D8D0C0; --paper-seal:#C2361B; --paper-amber:#A86A12; --paper-green:#1F7A4D;
 }
+/* Night */
 :root, :root[data-theme="dark"]{
-  --bg:#000; --bg-2:#0E0E0C; --panel:#1C1D19; --panel-2:#24251F; --panel-3:#3A3B34;
-  --line:#3A3B34; --line-2:#55564C;
-  --ink:#F0F1E9; --ink-2:#B4B5AA; --ink-3:#85867B;
-  --butter:#FBFFC9; --butter-ink:#11110E;
-  --amber:#E8B04B; --signal:#F26522; --on-signal:#11110E; --frost:#9DB4C6;
-  --bar:#B4B5AA; --onb: color-mix(in oklab, #FBFFC9 13%, transparent);
+  --bg:#0C111C; --bg-2:#0F1522; --panel:#121A29; --panel-2:#18223A; --panel-3:#26324C;
+  --line:#26324C; --line-2:#3A4868;
+  --ink:#ECE7DB; --ink-2:#A9B0C0; --ink-3:#7A849C;
+  --seal:#FF6A4D; --cobalt:#8AA9FF; --green:#5CC48D; --amber:#F2B94B;
+  --on-seal:#0C111C; --on-cobalt:#0C111C; --on-green:#0C111C;
+  --bar:#56627F; --onb: color-mix(in oklab, #8AA9FF 12%, transparent);
+  --signal: var(--seal); --frost: var(--amber);
   color-scheme: dark;
 }
+/* Day */
 :root[data-theme="light"]{
-  --bg:#F0F1E9; --bg-2:#E8E9DF; --panel:#E2E3D8; --panel-2:#D8D9CD; --panel-3:#C2C3B6;
-  --line:#C9CABD; --line-2:#9C9D90;
-  --ink:#11110E; --ink-2:#45463F; --ink-3:#6B6C62;
-  --butter:#2B3300; --butter-ink:#F6F9CF;
-  --amber:#9A5F00; --signal:#D9480F; --on-signal:#11110E; --frost:#3B5A6E;
-  --bar:#45463F; --onb: color-mix(in oklab, #C9D24A 30%, transparent);
+  --bg:#F5F2EA; --bg-2:#F0ECE2; --panel:#ECE7DC; --panel-2:#E3DDCF; --panel-3:#CFC6B4;
+  --line:#D8D0C0; --line-2:#B8AE9B;
+  --ink:#14161B; --ink-2:#4A4F5C; --ink-3:#747884;
+  --seal:#C2361B; --cobalt:#2747C9; --green:#1F7A4D; --amber:#A86A12;
+  --on-seal:#F5F2EA; --on-cobalt:#F5F2EA; --on-green:#F5F2EA;
+  --bar:#9C9A93; --onb: color-mix(in oklab, #2747C9 9%, transparent);
+  --signal: var(--seal); --frost: var(--amber);
   color-scheme: light;
 }
 @media (prefers-color-scheme: light){
   :root:not([data-theme]){
-    --bg:#F0F1E9; --bg-2:#E8E9DF; --panel:#E2E3D8; --panel-2:#D8D9CD; --panel-3:#C2C3B6; --line:#C9CABD; --line-2:#9C9D90;
-    --ink:#11110E; --ink-2:#45463F; --ink-3:#6B6C62; --butter:#2B3300; --butter-ink:#F6F9CF;
-    --amber:#9A5F00; --signal:#D9480F; --on-signal:#11110E; --frost:#3B5A6E; --bar:#45463F; --onb: color-mix(in oklab, #C9D24A 30%, transparent); color-scheme: light;
+    --bg:#F5F2EA; --bg-2:#F0ECE2; --panel:#ECE7DC; --panel-2:#E3DDCF; --panel-3:#CFC6B4; --line:#D8D0C0; --line-2:#B8AE9B;
+    --ink:#14161B; --ink-2:#4A4F5C; --ink-3:#747884; --seal:#C2361B; --cobalt:#2747C9; --green:#1F7A4D; --amber:#A86A12;
+    --on-seal:#F5F2EA; --on-cobalt:#F5F2EA; --on-green:#F5F2EA; --bar:#9C9A93; --onb: color-mix(in oklab, #2747C9 9%, transparent); color-scheme: light;
   }
 }
 *{box-sizing:border-box}
@@ -51,66 +55,73 @@ html,body{margin:0}
 html[data-stage] body{zoom:1.18}
 body{background:var(--bg); color:var(--ink); font-family:var(--font-sans); font-size:16px; line-height:1.5;
   -webkit-font-smoothing:antialiased; transition: background-color .35s var(--ease-step), color .35s var(--ease-step)}
-::selection{background:var(--butter); color:var(--butter-ink)}
+::selection{background:var(--cobalt); color:var(--on-cobalt)}
 .mono{font-family:var(--font-mono)}
 .num{font-variant-numeric:tabular-nums}
-.label{font-family:var(--font-mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3)}
+.label{font-family:var(--font-mono); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3)}
+.sec{font-family:var(--font-serif); font-weight:600; color:var(--cobalt); margin-right:.35em; font-style:normal}
 .wrap{max-width:1320px; margin:0 auto; padding:0 var(--gutter)}
 main.press{animation:press .08s steps(1)}
 @keyframes press{0%{transform:translateY(2px)} 100%{transform:none}}
 
-/* Top bar */
-.bar{position:sticky; top:0; z-index:20; background:var(--bg); border-bottom:1px solid var(--line)}
+/* Top bar: double rule like legal paper */
+.bar{position:sticky; top:0; z-index:20; background:var(--bg); border-bottom:3px double var(--line-2)}
 .bar .wrap{display:flex; align-items:center; gap:20px; height:60px}
-.brand{display:flex; align-items:center; gap:10px; font-weight:500; font-size:22px; letter-spacing:-.03em}
-.brand svg{width:22px; height:22px}
-.brand small{font-family:var(--font-mono); font-size:11px; letter-spacing:.12em; color:var(--ink-3); text-transform:uppercase; font-weight:400}
+.brand{display:flex; align-items:center; gap:10px}
+.brand svg{width:26px; height:26px; color:var(--ink)}
+.brand .word{font-family:var(--font-serif); font-weight:700; font-size:24px; letter-spacing:.02em; line-height:1; font-variation-settings:"opsz" 72}
+.brand small{font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; color:var(--ink-3); text-transform:uppercase; font-weight:400; padding-left:10px; border-left:1px solid var(--line)}
 .leds{display:flex; gap:16px; margin-left:auto; align-items:center}
-.led{display:flex; align-items:center; gap:8px}
-.led i{width:6px; height:6px; display:block; background:var(--panel-3)}
-.led i.on{background:var(--butter)}
-.led i.err{background:var(--signal)}
-.tbtn{all:unset; cursor:pointer; padding:8px 11px; font-family:var(--font-mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-2); border:1px solid var(--line-2)}
+.led{display:flex; align-items:center; gap:7px}
+.led i{width:8px; height:8px; display:block; border-radius:50%; background:var(--panel-3); box-shadow:0 0 0 2px color-mix(in oklab, var(--line) 70%, transparent)}
+.led i.on{background:var(--green)}
+.led i.err{background:var(--seal)}
+.tbtn{all:unset; cursor:pointer; padding:7px 11px; font-family:var(--font-sans); font-size:13px; font-weight:500; color:var(--ink-2); border:1px solid var(--line-2); border-radius:var(--r)}
 .tbtn[aria-pressed="true"]{background:var(--ink); color:var(--bg); border-color:var(--ink)}
-.tbtn:focus-visible{outline:2px solid var(--butter); outline-offset:2px}
+.tbtn:focus-visible{outline:2px solid var(--cobalt); outline-offset:2px}
 .seg{display:inline-flex; flex-wrap:wrap}
+.seg .tbtn{border-radius:0}
+.seg .tbtn:first-child{border-radius:var(--r) 0 0 var(--r)}
+.seg .tbtn:last-child{border-radius:0 var(--r) var(--r) 0}
 .seg .tbtn + .tbtn{border-left:0}
 
 /* Buttons */
-.btn{all:unset; box-sizing:border-box; cursor:pointer; display:inline-flex; align-items:center; gap:10px; padding:13px 20px;
-  font-size:17px; font-weight:500; letter-spacing:-.01em; border:1px solid var(--line-2); color:var(--ink); transition: background .2s}
+.btn{all:unset; box-sizing:border-box; cursor:pointer; display:inline-flex; align-items:center; gap:10px; padding:12px 18px; border-radius:var(--r);
+  font-size:16px; font-weight:600; letter-spacing:0; border:1px solid var(--line-2); color:var(--ink); transition: background .2s}
 .btn:hover{background:var(--panel)}
 .btn:active{transform:translateY(1px)}
-.btn.primary{background:var(--butter); color:var(--butter-ink); border-color:transparent}
-.btn.primary:hover{background:var(--butter); filter:brightness(.96)}
-.btn.sm{padding:9px 13px; font-size:14px; white-space:nowrap}
+.btn.primary{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+.btn.primary:hover{background:var(--ink); filter:brightness(1.12)}
+.btn.sm{padding:8px 12px; font-size:14px; white-space:nowrap}
 .btn svg{width:16px; height:16px}
-.btn:focus-visible{outline:2px solid var(--butter); outline-offset:2px}
+.btn:focus-visible{outline:2px solid var(--cobalt); outline-offset:2px}
 .btn[disabled]{opacity:.5; cursor:progress}
 
 /* Hero */
-.hero{padding:44px 0 30px}
+.hero{padding:40px 0 30px}
 .hero-grid{display:grid; grid-template-columns: .9fr 1.1fr; gap:44px; align-items:start}
-h1{font-weight:400; font-size:clamp(44px, 5.6vw, 72px); line-height:1; letter-spacing:-.055em; margin:16px 0 18px; max-width:12ch}
-.lede{color:var(--ink-2); font-size:19px; line-height:1.45; max-width:36ch; margin:0 0 24px}
+.docket{display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-2);
+  border:1px solid var(--line-2); border-radius:var(--r); padding:3px 8px; margin-bottom:12px}
+.docket b{color:var(--cobalt); font-weight:600}
+h1{font-family:var(--font-serif); font-weight:600; font-size:clamp(44px, 5.6vw, 74px); line-height:1; letter-spacing:-.025em; margin:14px 0 18px; max-width:12ch; font-variation-settings:"opsz" 144}
+h1 em{font-style:italic; font-weight:600; color:var(--seal)}
+.lede{color:var(--ink-2); font-size:19px; line-height:1.5; max-width:38ch; margin:0 0 24px}
 .cta{display:flex; gap:12px; flex-wrap:wrap}
-.term{margin-top:20px; border:1px solid var(--line-2); background:var(--panel); font-family:var(--font-mono); font-size:13px}
-.term .chrome{display:flex; gap:5px; padding:9px 12px; border-bottom:1px solid var(--line); align-items:center}
-.term .chrome i{width:8px; height:8px; background:var(--panel-3); display:block}
-.term .chrome span{margin-left:10px; color:var(--ink-3); font-size:12px}
+.term{margin-top:20px; border:1px solid var(--line-2); border-radius:var(--r); background:var(--panel); font-family:var(--font-mono); font-size:13px; overflow:hidden}
+.term .chrome{display:flex; gap:10px; padding:8px 12px; border-bottom:3px double var(--line); align-items:center; justify-content:space-between}
+.term .chrome span{color:var(--ink-3); font-size:11.5px; letter-spacing:.06em}
+.term .chrome .sec{font-size:14px}
 .term .log{height:236px; overflow:hidden; padding:10px 14px; display:flex; flex-direction:column; justify-content:flex-end}
 .term .ln{white-space:pre; overflow:hidden; text-overflow:ellipsis; animation: stepin var(--dur-step) var(--ease-step)}
-.term .ln .k{color:var(--ink-3)} .term .ln .ok{color:var(--butter)} .term .ln .bad{color:var(--signal)} .term .ln .inf{color:var(--amber)} .term .ln .abs{color:var(--frost)}
-:root[data-theme="light"] .term .ln .ok{color:#56620A}
-.cursor{display:inline-block; width:.6em; height:1.05em; vertical-align:-2px; background:var(--ink); animation:blink 1s steps(1) infinite}
+.term .ln .k{color:var(--ink-3)} .term .ln .ok{color:var(--green)} .term .ln .bad{color:var(--seal)} .term .ln .inf{color:var(--amber)} .term .ln .abs{color:var(--amber)}
+.cursor{display:inline-block; width:.55em; height:1.05em; vertical-align:-2px; background:var(--ink); animation:blink 1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
 @keyframes stepin{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
 
-/* Income canvas (chamfered tray) */
-.tray{position:relative; padding:18px 20px 16px; border:1px solid var(--line-2); border-radius:3px;
-  clip-path: polygon(0 0, calc(100% - 26px) 0, 100% 26px, 100% 100%, 0 100%)}
-.chamfer{position:absolute; right:-1px; top:-1px; width:27px; height:27px; pointer-events:none}
-.tray-head{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:4px}
+/* Income canvas: a filed exhibit */
+.tray{position:relative; padding:16px 20px 16px; border:1px solid var(--line-2); border-radius:var(--r); background:var(--bg-2)}
+.tray::before{content:""; position:absolute; left:0; right:0; top:0; height:0; border-top:3px double var(--line-2); border-radius:var(--r) var(--r) 0 0; pointer-events:none}
+.tray-head{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:4px; padding-top:4px}
 .tray-head .hint{font-size:14px; color:var(--ink-2)}
 .readout{font-family:var(--font-mono); font-size:13px; color:var(--ink-2); text-align:right; min-height:20px; white-space:nowrap}
 .cv{display:grid; grid-template-columns: 44px 1fr; column-gap:6px; margin-top:10px}
@@ -119,138 +130,149 @@ h1{font-weight:400; font-size:clamp(44px, 5.6vw, 72px); line-height:1; letter-sp
 .plot{position:relative; height:266px; padding-top:36px}
 .grid-l{position:absolute; left:0; right:0; height:0; border-top:1px solid var(--line); pointer-events:none}
 .bars{position:relative; height:230px; display:grid; grid-template-columns:repeat(26,1fr); gap:3px; touch-action:none; cursor:ns-resize; user-select:none}
-.col{position:relative; height:100%; outline:none}
+.col{position:relative; height:100%; outline:none; border-radius:2px 2px 0 0}
 .col.onb{background:var(--onb)}
-.col:focus-visible{outline:2px solid var(--butter); outline-offset:1px}
-.col .fill{position:absolute; left:0; right:0; bottom:0; background:var(--bar); transition:height .12s linear, background .3s}
+.col:focus-visible{outline:2px solid var(--cobalt); outline-offset:1px}
+.col .fill{position:absolute; left:0; right:0; bottom:0; background:var(--bar); border-radius:2px 2px 0 0; transition:height .12s linear, background .3s}
 .col.hot .fill{background:var(--ink)}
 .col .cap{position:absolute; left:0; right:0; height:2px; background:var(--ink); transform:translateY(1px); opacity:0}
 .col:hover .cap, .col.hot .cap{opacity:1}
 .avg{position:absolute; left:0; right:0; height:0; border-top:2px dashed var(--ink-3); pointer-events:none; transition:top .2s var(--ease-step), border-color .3s}
-.avg span{position:absolute; right:0; bottom:4px; font-family:var(--font-mono); font-size:11.5px; color:var(--ink-3); background:var(--bg); padding:1px 5px; white-space:nowrap}
-.avg.hot{border-top-color:var(--signal)} .avg.hot span{color:var(--signal)}
-.figure{position:absolute; width:22px; height:30px; color:var(--ink); pointer-events:none; transition:left .25s var(--ease-step), bottom .25s var(--ease-step)}
+.avg span{position:absolute; right:0; bottom:4px; font-family:var(--font-mono); font-size:11.5px; color:var(--ink-3); background:var(--bg-2); padding:1px 5px; white-space:nowrap; border-radius:2px}
+.avg.hot{border-top-color:var(--seal)} .avg.hot span{color:var(--seal)}
+/* the docket marker: sits on the tallest bar */
+.docket-tag{position:absolute; width:18px; height:20px; border-radius:var(--r); background:var(--cobalt); color:var(--on-cobalt); pointer-events:none; z-index:2;
+  font-family:var(--font-serif); font-weight:700; font-size:14px; line-height:20px; text-align:center; transition:left .25s var(--ease-step), bottom .25s var(--ease-step)}
+.docket-tag::after{content:""; position:absolute; left:50%; bottom:-4px; transform:translateX(-50%); border:4px solid transparent; border-bottom:0; border-top-color:var(--cobalt)}
 .togs{display:grid; grid-template-columns:repeat(26,1fr); gap:3px; margin-top:6px}
-.tog{all:unset; cursor:pointer; aspect-ratio:1; max-height:16px; width:100%; box-shadow: inset 0 0 0 1px var(--line-2); justify-self:center}
-.tog[aria-pressed="true"]{background:var(--butter); box-shadow:none}
-.tog:focus-visible{outline:2px solid var(--butter); outline-offset:1px}
+.tog{all:unset; cursor:pointer; height:10px; width:100%; border-radius:3px; box-shadow: inset 0 0 0 1px var(--line-2); justify-self:center}
+.tog[aria-pressed="true"]{background:var(--cobalt); box-shadow:none}
+.tog:focus-visible{outline:2px solid var(--cobalt); outline-offset:1px}
 .fnl{display:grid; grid-template-columns:repeat(26,1fr); gap:3px; margin-top:3px; font-family:var(--font-mono); font-size:10.5px; color:var(--ink-3); text-align:center}
-.ctrls{display:grid; gap:10px; margin-top:14px}
+.ctrls{display:grid; gap:10px; margin-top:14px; padding-top:12px; border-top:1px solid var(--line)}
 .ctrl-row{display:flex; gap:10px 14px; flex-wrap:wrap; align-items:center}
 .ctrl-row .label{min-width:70px}
-.chipbtn{all:unset; cursor:pointer; padding:7px 10px; border:1px solid var(--line-2); font-family:var(--font-mono); font-size:12.5px; color:var(--ink-2)}
+.chipbtn{all:unset; cursor:pointer; padding:6px 10px; border:1px solid var(--line-2); border-radius:var(--r); font-family:var(--font-sans); font-size:13.5px; color:var(--ink-2)}
 .chipbtn:hover{color:var(--ink); border-color:var(--ink-2)}
 .chipbtn.on, .chipbtn[aria-pressed="true"]{background:var(--ink); color:var(--bg); border-color:var(--ink)}
-.chipbtn:focus-visible{outline:2px solid var(--butter); outline-offset:2px}
+.chipbtn:focus-visible{outline:2px solid var(--cobalt); outline-offset:2px}
 .total{margin-left:auto; text-align:right}
-.total b{display:block; font-size:30px; font-weight:400; letter-spacing:-.04em; line-height:1; font-variant-numeric:tabular-nums}
+.total b{display:block; font-family:var(--font-serif); font-size:30px; font-weight:600; letter-spacing:-.01em; line-height:1; font-variant-numeric:tabular-nums}
 .legend{display:flex; gap:14px; flex-wrap:wrap; font-size:13px; color:var(--ink-2)}
-.legend i{display:inline-block; width:11px; height:11px; vertical-align:-1px; margin-right:6px}
+.legend i{display:inline-block; width:11px; height:11px; vertical-align:-1px; margin-right:6px; border-radius:2px}
 
 /* Verdict band */
-.band{display:grid; grid-template-columns: auto 1fr; gap:44px; align-items:end; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+.band{display:grid; grid-template-columns: auto 1fr; gap:44px; align-items:end; border-top:3px double var(--line-2); border-bottom:3px double var(--line-2);
   padding:22px 0 18px 22px; position:relative; margin-top:8px; transition:opacity .2s}
-.band::before{content:""; position:absolute; left:0; top:-1px; bottom:-1px; width:3px; background:var(--butter)}
-.band.k-bad::before{background:var(--signal)} .band.k-abs::before{background:var(--frost)}
+.band::before{content:""; position:absolute; left:0; top:10px; bottom:10px; width:3px; border-radius:2px; background:var(--green)}
+.band.k-bad::before{background:var(--seal)} .band.k-abs::before{background:var(--amber)}
 .band.pending{opacity:.6}
-.band .count{font-size:104px; font-weight:400; letter-spacing:-.05em; line-height:.9; font-variant-numeric:tabular-nums; white-space:nowrap}
-.band .count.bad{color:var(--signal)}
-.band .count small{font-size:34px; color:var(--ink-3); letter-spacing:-.03em}
-.band .verdict{font-size:clamp(34px,4.5vw,66px); font-weight:400; letter-spacing:-.06em; line-height:.95; overflow:hidden; white-space:nowrap; text-overflow:clip}
-.v-bad{color:var(--signal)} .v-ok{color:var(--ink)} .v-abs{color:var(--frost)}
+.band .count{font-family:var(--font-serif); font-size:104px; font-weight:600; letter-spacing:-.03em; line-height:.9; font-variant-numeric:tabular-nums lining-nums; white-space:nowrap; font-variation-settings:"opsz" 144}
+.band .count.bad{color:var(--seal)}
+.band .count small{font-size:32px; font-weight:500; color:var(--ink-3); letter-spacing:-.01em}
+.band .verdict{font-family:var(--font-serif); font-size:clamp(34px,4.5vw,64px); font-weight:700; letter-spacing:-.02em; line-height:.95; overflow:hidden; white-space:nowrap; text-overflow:clip; font-variation-settings:"opsz" 144}
+.v-bad{color:var(--seal)} .v-ok{color:var(--green)} .v-abs{color:var(--amber)} .v-wait{color:var(--ink-3); font-weight:500; font-style:italic}
 .band .meta{margin-top:10px}
 
 /* Console */
-.console{display:grid; grid-template-columns: 1fr 1.3fr 1.05fr; border:1px solid var(--line); margin:28px 0 18px; align-items:stretch}
+.console{display:grid; grid-template-columns: 1fr 1.3fr 1.05fr; border:1px solid var(--line); border-radius:var(--r); margin:28px 0 18px; align-items:stretch; overflow:hidden}
 .pane{border-right:1px solid var(--line); min-width:0; display:flex; flex-direction:column}
 .pane:last-child{border-right:0}
-.pane-h{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:13px 16px; border-bottom:1px solid var(--line); background:var(--bg-2)}
-.pane-h h3{margin:0; white-space:nowrap; font-size:19px; font-weight:500; letter-spacing:-.02em}
+.pane-h{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px; border-bottom:3px double var(--line); background:var(--bg-2)}
+.pane-h h3{margin:0; white-space:nowrap; font-family:var(--font-serif); font-size:21px; font-weight:600; letter-spacing:-.01em}
 .pane-h .label{text-align:right}
 .pane-b{padding:12px 16px 16px; flex:1}
 .sub-h{margin:18px 0 8px; display:flex; justify-content:space-between; gap:10px; align-items:baseline}
 
 .rule{display:grid; grid-template-columns: 18px 1fr; gap:10px; align-items:start; padding:12px 0 12px 8px; border-bottom:1px solid var(--line); position:relative}
 .rule:last-child{border-bottom:0}
-.rule .ic svg{width:15px; height:15px; margin-top:5px}
-.rule .rid{font-family:var(--font-mono); font-size:13.5px; font-weight:500; color:var(--ink)}
+.rule .ic svg{width:16px; height:16px; margin-top:3px}
+.rule .rid{font-family:var(--font-mono); font-size:13.5px; font-weight:600; color:var(--ink)}
 .rule .q{font-size:14.5px; color:var(--ink-2); margin-top:3px; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden}
 .rule .chips{display:flex; gap:6px; flex-wrap:wrap; margin-top:7px; align-items:center}
-.rule.touched::before{content:""; position:absolute; left:0; top:8px; bottom:8px; width:3px; background:var(--signal)}
+.rule.touched::before{content:""; position:absolute; left:0; top:8px; bottom:8px; width:3px; border-radius:2px; background:var(--seal)}
 .rule.flash{animation:flash 1.3s var(--ease-step)}
-@keyframes flash{0%{background:color-mix(in oklab, var(--signal) 34%, transparent)} 100%{background:transparent}}
-.chip{font-family:var(--font-mono); font-size:11.5px; letter-spacing:.06em; padding:2px 7px; border:1px solid var(--line-2); color:var(--ink-2); white-space:nowrap; display:inline-block}
-.chip.ok{border-color:transparent; background:var(--butter); color:var(--butter-ink)}
+@keyframes flash{0%{background:color-mix(in oklab, var(--seal) 26%, transparent)} 100%{background:transparent}}
+.chip{font-family:var(--font-mono); font-size:11.5px; letter-spacing:.04em; padding:2px 7px; border:1px solid var(--line-2); border-radius:3px; color:var(--ink-2); white-space:nowrap; display:inline-block}
+.chip.pg{border-color:color-mix(in oklab, var(--cobalt) 55%, transparent); color:var(--cobalt)}
+.chip.ok{border-color:transparent; background:var(--green); color:var(--on-green)}
 .chip.inf{border-color:var(--amber); color:var(--amber)}
-.chip.bad{border-color:transparent; background:var(--signal); color:var(--on-signal)}
-.chip.abs{border-color:var(--frost); color:var(--frost)}
-.chip.lg{font-size:13px; padding:4px 9px}
-.cite{display:inline-block; font-family:var(--font-mono); font-size:12px; color:var(--ink-3)}
+.chip.bad{border-color:transparent; background:var(--seal); color:var(--on-seal)}
+.chip.abs{border-color:var(--amber); color:var(--amber)}
+/* verdict chips are rubber stamps */
+.chip.lg{font-size:13px; font-weight:600; letter-spacing:.1em; padding:3px 9px; background:transparent; border:3px double currentColor; transform:rotate(-4deg); color:var(--ink-2)}
+.chip.lg.ok{color:var(--green)} .chip.lg.bad{color:var(--seal)} .chip.lg.abs, .chip.lg.inf{color:var(--amber)}
+.cite{display:inline-block; font-family:var(--font-mono); font-size:12px; color:var(--cobalt)}
 .muted{color:var(--ink-3)}
 .empty{font-family:var(--font-mono); font-size:13px; color:var(--ink-3); padding:10px 0}
 
-/* The letter: paper is paper in both themes */
+/* The letter: paper in both themes, with a margin line */
 .letters{display:grid; grid-template-columns: 1.45fr 1fr; gap:12px; align-items:stretch}
-.notice{position:relative; background:var(--paper); color:var(--paper-ink); padding:16px 16px 18px; overflow:hidden; border:1px solid var(--paper-line); min-height:250px}
-.notice .wm{font-family:var(--font-mono); font-size:10px; letter-spacing:.16em; color:#8B8878; text-transform:uppercase; display:flex; justify-content:space-between}
-.notice h4{font-family:var(--font-serif); font-weight:400; font-size:34px; line-height:1; margin:10px 0 10px; letter-spacing:-.01em}
-.notice .body{font-family:var(--font-mono); font-size:12.5px; line-height:1.55}
-.notice .amt{font-family:var(--font-mono); font-size:24px; font-weight:700; margin:8px 0; font-variant-numeric:tabular-nums}
+.notice{position:relative; background:var(--paper); color:var(--paper-ink); padding:16px 16px 18px 40px; overflow:hidden; border:1px solid var(--paper-line); border-radius:var(--r); min-height:250px}
+.notice::before{content:""; position:absolute; left:28px; top:0; bottom:0; border-left:1px solid var(--paper-seal); opacity:.55}
+.notice .wm{font-family:var(--font-mono); font-size:10px; letter-spacing:.12em; color:#747884; text-transform:uppercase; display:flex; justify-content:space-between; gap:10px; padding-bottom:6px; border-bottom:3px double var(--paper-line)}
+.notice h4{font-family:var(--font-serif); font-weight:600; font-size:30px; line-height:1; margin:16px 0 10px; letter-spacing:-.01em}
+.notice .body{font-family:var(--font-sans); font-size:13.5px; line-height:1.55}
+.notice .amt{font-family:var(--font-mono); font-size:24px; font-weight:600; margin:8px 0; font-variant-numeric:tabular-nums}
 .notice.void{opacity:.55}
-.stamp{position:absolute; left:50%; top:54%; transform:translate(-50%,-50%) rotate(-17deg); border:4px solid var(--signal); color:var(--signal);
-  font-family:var(--font-mono); font-weight:700; font-size:22px; line-height:1.1; letter-spacing:.06em; padding:8px 12px; white-space:pre-line; text-align:center; width:max-content; opacity:0; pointer-events:none; background:color-mix(in oklab, var(--paper) 65%, transparent)}
-.stamp.frost{border-color:#3B5A6E; color:#3B5A6E} .stamp.ok{border-color:#56620A; color:#56620A}
+.stamp{position:absolute; left:56%; top:56%; transform:translate(-50%,-50%) rotate(-4deg); border:5px double var(--paper-seal); border-radius:var(--r); color:var(--paper-seal);
+  font-family:var(--font-mono); font-weight:600; font-size:21px; line-height:1.15; letter-spacing:.1em; padding:8px 14px; white-space:pre-line; text-align:center; width:max-content; opacity:0; pointer-events:none; background:color-mix(in oklab, var(--paper) 70%, transparent)}
+.stamp.frost{border-color:var(--paper-amber); color:var(--paper-amber)} .stamp.ok{border-color:var(--paper-green); color:var(--paper-green)}
 .stamp.on{animation:stampin .14s steps(2) forwards}
-@keyframes stampin{0%{opacity:1; transform:translate(-50%,-50%) rotate(-17deg) scale(1.35)} 100%{opacity:.92; transform:translate(-50%,-50%) rotate(-17deg) scale(1)}}
-.lawful{border:1px solid var(--line-2); padding:14px; display:flex; flex-direction:column; gap:6px; background:var(--panel)}
-.lawful .big{font-size:44px; font-weight:400; letter-spacing:-.05em; line-height:1; font-variant-numeric:tabular-nums}
-.lawful .pr-big{font-size:26px; letter-spacing:-.04em; line-height:1; font-variant-numeric:tabular-nums}
-.twin{border:1px solid var(--line); margin-top:12px; padding:12px 14px}
+@keyframes stampin{0%{opacity:1; transform:translate(-50%,-50%) rotate(-4deg) scale(1.35)} 100%{opacity:.9; transform:translate(-50%,-50%) rotate(-4deg) scale(1)}}
+.lawful{border:1px solid var(--line-2); border-radius:var(--r); padding:14px; display:flex; flex-direction:column; gap:6px; background:var(--panel)}
+.lawful .big{font-family:var(--font-serif); font-size:42px; font-weight:600; letter-spacing:-.02em; line-height:1; font-variant-numeric:tabular-nums lining-nums}
+.lawful .pr-big{font-family:var(--font-serif); font-size:26px; font-weight:500; letter-spacing:-.01em; line-height:1; font-variant-numeric:tabular-nums lining-nums}
+.twin{border:1px solid var(--line); border-radius:var(--r); margin-top:12px; padding:12px 14px}
 .twin .twin-svg{width:100%; height:56px; display:block; margin:6px 0 10px}
 .twin-pair{display:grid; grid-template-columns:1fr 1fr; gap:14px}
-.twin p{margin:0; font-size:15px; line-height:1.4}
-.twin p b{font-weight:500}
-.snap{margin-top:12px; border:1px solid var(--line); padding:12px 14px; background:var(--bg-2)}
+.twin p{margin:0; font-size:15px; line-height:1.45}
+.twin p b{font-weight:600}
+.snap{margin-top:12px; border:1px solid var(--line); border-left:3px solid var(--cobalt); border-radius:var(--r); padding:12px 14px; background:var(--bg-2)}
 .snap .row{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:8px}
 .snap .kv{font-family:var(--font-mono); font-size:13px; color:var(--ink-2)}
-.snap .kv b{color:var(--ink); font-weight:500}
+.snap .kv b{color:var(--ink); font-weight:600}
 .post{display:grid; gap:6px; margin-top:10px}
 .post .r > span:first-child{overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 .post .r{display:grid; grid-template-columns: 172px 1fr 40px; gap:10px; align-items:center; font-family:var(--font-mono); font-size:12.5px}
-.post .track{height:9px; background:var(--panel-2); position:relative; overflow:hidden}
-.post .fill{position:absolute; inset:0 auto 0 0; background:var(--ink-3); transition: width .6s var(--ease-step)}
-.post .r.win .fill{background:var(--butter)}
+.post .track{height:8px; background:var(--panel-2); position:relative; overflow:hidden; border-radius:4px}
+.post .fill{position:absolute; inset:0 auto 0 0; background:var(--ink-3); border-radius:4px; transition: width .6s var(--ease-step)}
+.post .r.win .fill{background:var(--cobalt)}
 .post .pv{color:var(--ink-2); text-align:right}
-.snap-proof{display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-top:10px; padding-top:8px; border-top:1px solid var(--line)}
-.snap-proof .ms{font-size:34px; letter-spacing:-.04em; line-height:1; font-variant-numeric:tabular-nums}
+.snap-proof{display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-top:10px; padding-top:8px; border-top:3px double var(--line)}
+.snap-proof .ms{font-family:var(--font-serif); font-weight:600; font-size:34px; letter-spacing:-.02em; line-height:1; font-variant-numeric:tabular-nums lining-nums; color:var(--cobalt)}
 
 /* Certificate pane */
 .receipt{font-family:var(--font-mono); font-size:12.5px; color:var(--ink-2); padding:4px 0 12px; border-bottom:1px solid var(--line); line-height:1.6}
-.receipt b{color:var(--ink); font-weight:500}
+.receipt b{color:var(--ink); font-weight:600}
 .fails{margin-top:6px; display:grid; gap:4px}
 .fails div{display:grid; grid-template-columns:auto minmax(0,1fr); gap:8px; align-items:start; font-size:12px}
 .fails div span:last-child{color:var(--ink-3); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 .rt{width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:12.5px; table-layout:fixed}
-.rt th{font-weight:400; color:var(--ink-3); text-align:left; padding:6px 4px; border-bottom:1px solid var(--line); font-size:11px; letter-spacing:.1em; text-transform:uppercase}
+.rt th{font-weight:500; color:var(--ink-3); text-align:left; padding:6px 4px; border-bottom:3px double var(--line); font-size:11px; letter-spacing:.08em; text-transform:uppercase}
 .rt td{padding:7px 4px; border-bottom:1px solid var(--line); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-.rt-sum{font-size:16px; margin:10px 0 2px; letter-spacing:-.01em}
-.rt-sum b{font-weight:500}
-.cert{display:grid; grid-template-columns: 1fr 78px; gap:12px; border:1px solid var(--line-2); padding:16px; background:var(--panel); margin-top:10px}
-.cert h4{margin:2px 0 6px; font-family:var(--font-serif); font-weight:400; font-size:30px; letter-spacing:-.01em; font-style:italic; line-height:1.05}
+.rt-sum{font-family:var(--font-serif); font-size:18px; margin:10px 0 2px; letter-spacing:-.005em}
+.rt-sum b{font-weight:700}
+/* the certificate: a perforated slip */
+.cert{position:relative; display:grid; grid-template-columns: 1fr 84px; gap:12px; border:1px solid var(--line-2); border-top:0; border-radius:0 0 var(--r) var(--r); padding:22px 16px 16px; background:var(--panel); margin-top:16px}
+.cert::before{content:""; position:absolute; left:-1px; right:-1px; top:-5px; height:10px;
+  background: radial-gradient(circle at 5px 5px, var(--bg) 3.2px, transparent 3.7px) 0 0 / 10px 10px repeat-x}
+.cert::after{content:""; position:absolute; left:10px; right:10px; top:10px; border-top:1px dashed var(--line-2)}
+.cert h4{margin:2px 0 6px; font-family:var(--font-serif); font-weight:600; font-size:28px; letter-spacing:-.01em; line-height:1.05}
 .cert p{margin:6px 0; font-size:14px; color:var(--ink-2)}
 .cert .hash{font-family:var(--font-mono); font-size:12px; color:var(--ink-3); word-break:break-all; grid-column:1 / -1; min-height:3em}
-.seal{width:78px; height:78px; opacity:0; color:var(--ink)}
+.seal{width:84px; height:84px; opacity:0; color:var(--ink); transform:rotate(-4deg)}
 .seal.stamped{animation: stamp .12s steps(2) forwards}
-@keyframes stamp{0%{opacity:1; transform:scale(1.3)} 100%{opacity:1; transform:scale(1)}}
+@keyframes stamp{0%{opacity:1; transform:rotate(-4deg) scale(1.3)} 100%{opacity:1; transform:rotate(-4deg) scale(1)}}
 .testimony{display:flex; gap:8px; margin-top:8px}
-.testimony input{flex:1; min-width:0; background:var(--panel); border:1px solid var(--line-2); color:var(--ink); padding:11px 12px; font:inherit; font-size:15px; border-radius:0}
-.testimony input:focus{outline:2px solid var(--butter); outline-offset:-2px}
+.testimony input{flex:1; min-width:0; background:var(--panel); border:1px solid var(--line-2); color:var(--ink); padding:10px 12px; font:inherit; font-size:15px; border-radius:var(--r)}
+.testimony input:focus{outline:2px solid var(--cobalt); outline-offset:-2px}
 .examples{display:flex; gap:6px; flex-wrap:wrap; margin-top:8px}
 .answer{margin-top:10px; font-size:14px; min-height:24px}
-.answer blockquote{margin:8px 0 0; padding:8px 10px; border-left:2px solid var(--line-2); font-family:var(--font-serif); font-size:18px; line-height:1.3; color:var(--ink)}
-.ico{fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:square; stroke-linejoin:miter}
-footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3); font-size:14px}
-.spin{display:inline-block; width:8px; height:8px; background:var(--ink-3); animation:blink .6s steps(1) infinite; vertical-align:0; margin-right:6px}
+.answer blockquote{margin:10px 0 0; padding:8px 12px; border-left:3px double var(--cobalt); font-family:var(--font-serif); font-style:italic; font-size:18px; line-height:1.35; color:var(--ink)}
+.ico{fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round}
+footer{border-top:3px double var(--line-2); padding:18px 0 40px; color:var(--ink-3); font-size:14px; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap}
+.spin{display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--ink-3); animation:blink .6s steps(1) infinite; vertical-align:0; margin-right:6px}
 
 @media (max-width: 1100px){
   .hero-grid{grid-template-columns:1fr; gap:28px}
@@ -259,6 +281,7 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
 }
 @media (max-width: 640px){
   .leds .led .label{display:none}
+  .brand small{display:none}
   .letters{grid-template-columns:1fr} .twin{grid-template-columns:1fr}
   .cv{grid-template-columns:32px 1fr}
 }
@@ -271,39 +294,35 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <!-- ONUS mark: an O of three quarter-ring tiles; the fourth quadrant is a solid block, the burden, completing it -->
+    <!-- ONUS mark: a balance beam on a fulcrum; the burden (a solid block) rests on the right and tips it -->
     <symbol id="logo" viewBox="0 0 24 24">
-      <path d="M1.5 11.3A10.2 10.2 0 0 1 11.3 1.5V6.6A5.1 5.1 0 0 0 6.6 11.3Z" fill="currentColor"/>
-      <path d="M12.7 1.5A10.2 10.2 0 0 1 22.5 11.3H17.4A5.1 5.1 0 0 0 12.7 6.6Z" fill="currentColor"/>
-      <path d="M1.5 12.7H6.6A5.1 5.1 0 0 0 11.3 17.4V22.5A10.2 10.2 0 0 1 1.5 12.7Z" fill="currentColor"/>
-      <rect class="logo-live" x="13.6" y="13.6" width="8.9" height="8.9" fill="var(--butter)"/>
+      <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 10.6L22 13.4"/>
+        <path d="M12 13L8.2 20.5H15.8Z"/>
+        <path d="M6 21.5H18"/>
+      </g>
+      <rect class="logo-live" x="17" y="7.05" width="5" height="5" fill="var(--seal)" transform="rotate(8 19.5 12.05)"/>
     </symbol>
-    <symbol id="i-observed" viewBox="0 0 16 16"><rect x="2.5" y="2.5" width="11" height="11" fill="currentColor"/></symbol>
-    <symbol id="i-inferred" viewBox="0 0 16 16"><path class="ico" d="M2.5 13.5V2.5a11 11 0 0 1 11 11z"/></symbol>
+    <symbol id="i-observed" viewBox="0 0 16 16"><text x="8" y="13.2" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-weight="700" font-size="15" fill="currentColor">§</text></symbol>
+    <symbol id="i-inferred" viewBox="0 0 16 16"><text x="8" y="13.2" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-weight="700" font-size="15" fill="none" stroke="currentColor" stroke-width=".8">§</text></symbol>
     <symbol id="i-arrow" viewBox="0 0 16 16"><path class="ico" d="M2 8h11M9 4l4 4-4 4"/></symbol>
-    <symbol id="i-stage" viewBox="0 0 16 16"><rect class="ico" x="1.5" y="2.5" width="13" height="9"/><path class="ico" d="M5 14.5h6M8 11.5v3"/></symbol>
-    <symbol id="i-probe" viewBox="0 0 16 16"><path class="ico" d="M8 1v4M8 11v4M1 8h4M11 8h4"/><rect x="6.5" y="6.5" width="3" height="3" fill="currentColor"/></symbol>
-    <symbol id="figure" viewBox="0 0 22 30">
-      <circle cx="9" cy="4" r="3" fill="none" stroke="currentColor" stroke-width="1.4"/>
-      <path d="M9 7v11M9 18l-4 9M9 18l4 9M9 11l-5 3M9 11l6-2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/>
-      <path d="M15 9l4 9" stroke="currentColor" stroke-width="1.4"/>
-      <rect x="17.5" y="17" width="3.4" height="4.4" fill="var(--paper)" stroke="currentColor" stroke-width=".7"/>
-    </symbol>
-    <symbol id="hallmark" viewBox="0 0 100 100">
-      <rect x="5" y="5" width="90" height="90" fill="none" stroke="currentColor" stroke-width="4"/>
-      <rect x="13" y="13" width="74" height="74" fill="none" stroke="currentColor" stroke-width="1.2"/>
-      <path d="M28 26h20v20H28z" fill="currentColor"/>
-      <path d="M52 46V26a20 20 0 0 1 20 20z" fill="currentColor"/>
-      <path d="M28 50h20a20 20 0 0 1-20 20z" fill="currentColor"/>
-      <rect x="52" y="50" width="20" height="20" fill="none" stroke="currentColor" stroke-width="4"/>
-      <text x="50" y="84" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7.5" letter-spacing="1.4" fill="currentColor">ONUS 2026</text>
+    <symbol id="i-stage" viewBox="0 0 16 16"><rect class="ico" x="1.5" y="2.5" width="13" height="9" rx="1.5"/><path class="ico" d="M5 14.5h6M8 11.5v3"/></symbol>
+    <symbol id="i-probe" viewBox="0 0 16 16"><path class="ico" d="M8 1v4M8 11v4M1 8h4M11 8h4"/><circle cx="8" cy="8" r="1.8" fill="currentColor"/></symbol>
+    <!-- Registry stamp: ring text around the balance mark -->
+    <symbol id="registry-seal" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="3"/>
+      <circle cx="50" cy="50" r="41.5" fill="none" stroke="currentColor" stroke-width="1"/>
+      <circle cx="50" cy="50" r="27.5" fill="none" stroke="currentColor" stroke-width="1"/>
+      <path id="sealRing" d="M50 16.5a33.5 33.5 0 1 1 0 67a33.5 33.5 0 1 1 0-67" fill="none"/>
+      <text font-family="IBM Plex Mono, monospace" font-size="7.2" font-weight="600" letter-spacing="1.6" fill="currentColor"><textPath href="#sealRing" startOffset="0" textLength="204" lengthAdjust="spacing">ONUS · REGISTRY · 2026 · ONUS · REGISTRY · 2026 ·</textPath></text>
+      <use href="#logo" x="35" y="33" width="30" height="30"/>
     </symbol>
   </defs>
 </svg>
 
 <header class="bar">
   <div class="wrap">
-    <div class="brand"><svg aria-hidden="true"><use href="#logo"/></svg><span>ONUS</span><small>merge gate for law-code</small></div>
+    <div class="brand"><svg aria-hidden="true"><use href="#logo"/></svg><span class="word">ONUS</span><small>Registry for law-code</small></div>
     <div class="leds" aria-label="Model status">
       <span class="led" title="SubQ Snap: decisions"><i data-led="snap"></i><span class="label">SubQ Snap</span></span>
       <span class="led" title="Muse Spark: reads the Act"><i data-led="muse"></i><span class="label">Muse Spark</span></span>
@@ -311,7 +330,7 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
     </div>
     <button class="tbtn" id="stageBtn" aria-pressed="false" title="Stage mode (S)"><svg width="12" height="12" style="vertical-align:-1px"><use href="#i-stage"/></svg> Stage</button>
     <div class="seg" role="group" aria-label="Theme">
-      <button class="tbtn" data-theme-set="light" aria-pressed="false">Ledger</button>
+      <button class="tbtn" data-theme-set="light" aria-pressed="false">Day</button>
       <button class="tbtn" data-theme-set="dark" aria-pressed="true">Night</button>
     </div>
   </div>
@@ -321,23 +340,23 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
   <section class="hero">
     <div class="hero-grid">
       <div>
-        <div class="label" id="actMeta">Social Security Act 1991 · vol. 3 · 828 pages · read by Muse Spark</div>
-        <h1>CI was green. The law wasn’t.</h1>
+        <div class="docket"><span class="sec">§</span>Docket <b>2026-AIE-014</b></div>
+        <div class="label" id="actMeta">Registry for law-code · Social Security Act 1991 · 828 pages</div>
+        <h1>CI was green. The law <em>wasn’t.</em></h1>
         <p class="lede">ONUS reads the statute, seals its tests before any AI writes a line, and blocks code that would send a letter the law doesn’t allow.</p>
         <div class="cta">
           <button class="btn primary" id="runBtn">Run the gate <svg><use href="#i-arrow"/></svg></button>
           <button class="btn" id="rtBtn"><svg><use href="#i-probe"/></svg> Red-team</button>
         </div>
         <div class="term" role="log" aria-label="Run log">
-          <div class="chrome"><i></i><i></i><i></i><span>~/benefits-engine · onus</span></div>
+          <div class="chrome"><span><span class="sec">§</span>~/benefits-engine · onus</span><span>Docket 2026-AIE-014</span></div>
           <div class="log" id="log"><div class="ln"><span class="k">$</span> <span class="cursor"></span></div></div>
         </div>
       </div>
 
       <div class="tray" aria-label="Income canvas: one bar per fortnight">
-        <svg class="chamfer" viewBox="0 0 27 27" aria-hidden="true"><line x1="0" y1="0.5" x2="26.5" y2="27" stroke="var(--line-2)" stroke-width="1" shape-rendering="crispEdges"/></svg>
         <div class="tray-head">
-          <div><div class="label">Income canvas · one year · 26 fortnights</div><div class="hint">Drag the bars to draw what a person earned. Square under a bar = on benefit that fortnight.</div></div>
+          <div><div class="label"><span class="sec">§</span>Exhibit A · income canvas · 26 fortnights</div><div class="hint">Drag the bars to draw what a person earned. Mark under a bar = on benefit that fortnight.</div></div>
           <div class="readout"><span id="ro"></span><br><span id="pendingLbl"></span></div>
         </div>
         <div class="cv">
@@ -368,7 +387,7 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
             <button class="chipbtn" id="payBtn" aria-pressed="false">Payslips available: no</button>
             <div class="total"><span class="label">ATO annual income</span><b id="annual">$0</b></div>
           </div>
-          <div class="legend"><span><i style="background:var(--bar)"></i>earned that fortnight</span><span><i style="background:var(--butter)"></i>on benefit</span><span><i style="border-top:2px dashed var(--ink-3);height:0;width:16px"></i>annual ÷ 26 (what averaging assumes)</span></div>
+          <div class="legend"><span><i style="background:var(--bar)"></i>earned that fortnight</span><span><i style="background:var(--cobalt)"></i>on benefit</span><span><i style="border-top:2px dashed var(--ink-3);height:0;width:16px;border-radius:0"></i>annual ÷ 26 (what averaging assumes)</span></div>
         </div>
       </div>
     </div>
@@ -376,17 +395,17 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
 
   <section class="band" id="band" aria-live="polite" aria-atomic="true">
     <div><div class="count" id="bandCount">—</div><div class="label meta" id="bandCountMeta">letter the PR would send</div></div>
-    <div><div class="verdict" id="bandVerdict"><span class="v-ok">Waiting for a run</span><span class="cursor" style="margin-left:.12em;height:.8em;vertical-align:0"></span></div><div class="label meta" id="bandMeta">SubQ Snap · decision layer</div></div>
+    <div><div class="verdict" id="bandVerdict"><span class="v-wait">Waiting for a run</span><span class="cursor" style="margin-left:.12em;height:.8em;vertical-align:0"></span></div><div class="label meta" id="bandMeta">SubQ Snap · decision layer</div></div>
   </section>
 
   <section class="console" aria-label="ONUS console">
     <div class="pane" data-section="act">
-      <div class="pane-h"><h3>The Act</h3><span class="label" id="museMeta">Muse Spark · cited rules</span></div>
+      <div class="pane-h"><h3><span class="sec">§1</span>The Act</h3><span class="label" id="museMeta">Muse Spark · cited rules</span></div>
       <div class="pane-b" id="rules"><div class="empty">loading rules…</div></div>
     </div>
 
     <div class="pane" data-section="letter">
-      <div class="pane-h"><h3>The letter</h3><span class="label">synthetic person · real statute</span></div>
+      <div class="pane-h"><h3><span class="sec">§2</span>The letter</h3><span class="label">synthetic person · real statute</span></div>
       <div class="pane-b">
         <div class="letters">
           <div class="notice void" id="notice">
@@ -413,23 +432,23 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
     </div>
 
     <div class="pane" data-section="cert">
-      <div class="pane-h"><h3>Certificate</h3><span class="label">in-toto · sealed suite</span></div>
+      <div class="pane-h"><h3><span class="sec">§3</span>Certificate</h3><span class="label">in-toto · sealed suite</span></div>
       <div class="pane-b">
         <div class="receipt" id="sealed">Sealed suite: <span class="muted">waiting for a run</span></div>
         <div class="sub-h"><span class="label">Red team · Gemini, rules only</span><button class="btn sm" id="rtBtn2">Run red team</button></div>
-        <div id="redteam"><div class="empty">Gemini proposed misreadings of the Act from the rules alone; we ported them as PLANTED PRs. Press Red-team to run them through smoke CI (3 tests we wrote) and through ONUS.</div></div>
+        <div id="redteam"><div class="empty">Gemini proposed misreadings of the Act from the rules alone; we ported them as PLANTED PRs. Press Red-team to run them through Smoke CI (3 tests we wrote) and through ONUS.</div></div>
         <div class="cert" id="cert">
           <div>
-            <div class="label">Certificate of gate</div>
+            <div class="label">Certificate of gate · Docket 2026-AIE-014</div>
             <h4 id="certTitle">Not yet issued</h4>
             <p id="certText">Run the gate, then issue a hashed (sha256) statement of what ONUS saw.</p>
             <p class="mono" style="font-size:12px">Muse: the Act · Gemini: rules only, never the code · Judge: SubQ Snap</p>
           </div>
-          <svg class="seal" id="seal" viewBox="0 0 100 100" aria-hidden="true"><use href="#hallmark"/></svg>
+          <svg class="seal" id="seal" viewBox="0 0 100 100" aria-hidden="true"><use href="#registry-seal"/></svg>
           <div class="hash" id="hash">sha256 —</div>
         </div>
         <div style="margin-top:10px"><button class="btn sm" id="certBtn">Issue certificate</button></div>
-        <div class="label" style="margin-top:18px">Testimony · ask the Act</div>
+        <div class="label" style="margin-top:18px"><span class="sec">§</span>Testimony · ask the Act</div>
         <form class="testimony" id="testimony">
           <input id="claimIn" placeholder="The free area is $100 a fortnight" aria-label="Claim about the Act">
           <button class="btn sm" type="submit">Ask</button>
@@ -444,7 +463,7 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
     </div>
   </section>
 
-  <footer>The statute is real (CC BY 4.0, legislation.gov.au). People and red-team PRs are synthetic. Not legal advice.</footer>
+  <footer><span>The statute is real (CC BY 4.0, legislation.gov.au). People and red-team PRs are synthetic. Not legal advice.</span><span class="mono" style="font-size:12px">ONUS Registry · Docket 2026-AIE-014</span></footer>
 </main>
 
 <script>
@@ -470,7 +489,7 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
   $('#stageBtn').addEventListener('click', () => setStage(!root.hasAttribute('data-stage')));
   addEventListener('keydown', (e) => { if (e.key && e.key.toLowerCase() === 's' && !e.metaKey && !e.ctrlKey && !/input|textarea/i.test(e.target.tagName)) setStage(!root.hasAttribute('data-stage')); });
 
-  /* ---------- one clock: LEDs + logo tile ---------- */
+  /* ---------- one clock: LEDs + logo burden ---------- */
   const busy = { snap: 0, muse: 0, gemini: 0 }, errUntil = { snap: 0, muse: 0, gemini: 0 };
   const setBusy = (k, d) => { busy[k] = Math.max(0, busy[k] + d); };
   const ledErr = (k) => { errUntil[k] = performance.now() + 4000; };
@@ -545,7 +564,7 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
     $('#fnl').insertAdjacentHTML('beforeend', `<span>${(i === 0 || i === 12 || i === 13 || i === 25) ? i + 1 : ''}</span>`);
   }
   const avgLine = document.createElement('div'); avgLine.className = 'avg'; avgLine.innerHTML = '<span></span>'; bars.appendChild(avgLine);
-  const fig = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); fig.setAttribute('class', 'figure'); fig.setAttribute('viewBox', '0 0 22 30'); fig.innerHTML = '<use href="#figure"/>'; fig.setAttribute('aria-hidden', 'true');
+  const fig = document.createElement('div'); fig.className = 'docket-tag'; fig.textContent = '§'; fig.setAttribute('aria-hidden', 'true');
   bars.appendChild(fig);
 
   function paintCanvas() {
@@ -564,7 +583,7 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
     avgLine.querySelector('span').textContent = `annual ÷ 26 = ${money(avg)}`;
     const c = cols[top], w = c.offsetWidth;
     fig.style.left = (c.offsetLeft + w / 2 - 9) + 'px';
-    fig.style.bottom = (state.earned[top] / MAX * bars.offsetHeight) + 'px';
+    fig.style.bottom = (state.earned[top] / MAX * bars.offsetHeight + 6) + 'px';
     $$('[data-preset]').forEach(b => b.classList.toggle('on', b.dataset.preset === state.preset));
     $$('[data-pr]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.pr === state.pr)));
     $('#payBtn').setAttribute('aria-pressed', String(state.payslips));
@@ -616,7 +635,7 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
       const d = await api('GET', '/api/rules');
       rules = (d && d.rules) || [];
       const a = d.act || {}, m = a.muse || {};
-      if (a.pages) $('#actMeta').textContent = `Social Security Act 1991 · vol. 3 · ${a.pages} pages · read by Muse Spark`;
+      if (a.pages) $('#actMeta').textContent = `Registry for law-code · Social Security Act 1991 · ${a.pages} pages`;
       const ver = rules.filter(r => r.verified).length;
       $('#museMeta').textContent = `${m.model || 'Muse Spark'} · ${m.prompt_tokens ? Math.round(m.prompt_tokens / 1000) + 'k tokens · ' : ''}${m.seconds ? m.seconds + ' s' : ''}`;
       renderRules();
@@ -632,10 +651,10 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
     rules.forEach(r => {
       const el = document.createElement('div'); el.className = 'rule'; el.dataset.rule = norm(r.id);
       const v = !!r.verified;
-      el.innerHTML = `<span class="ic" style="color:${v ? 'var(--butter)' : 'var(--amber)'}"><svg><use href="#${v ? 'i-observed' : 'i-inferred'}"/></svg></span>
+      el.innerHTML = `<span class="ic" style="color:${v ? 'var(--green)' : 'var(--amber)'}"><svg><use href="#${v ? 'i-observed' : 'i-inferred'}"/></svg></span>
         <div><div class="rid">s${esc(r.id)}${r.role ? ` <span class="cite">· ${esc(r.role)}</span>` : ''}</div>
         <div class="q" title="${esc(r.quote)}">“${esc(r.quote)}”</div>
-        <div class="chips"><span class="chip">p.${esc(r.page)}</span><span class="chip ${v ? 'ok' : 'inf'}">${v ? 'VERBATIM · OBSERVED' : 'UNVERIFIED'}</span><span class="tch"></span></div></div>`;
+        <div class="chips"><span class="chip pg">p.${esc(r.page)}</span><span class="chip ${v ? 'ok' : 'inf'}">${v ? 'VERBATIM · OBSERVED' : 'UNVERIFIED'}</span><span class="tch"></span></div></div>`;
       box.appendChild(el);
     });
   }
@@ -757,7 +776,7 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
       const h = Math.min(1, (earned[i] || 0) / MAX) * 44;
       if (on && on[i]) out += `<rect x="${i * w}" y="0" width="${w - 1.5}" height="46" fill="var(--onb)"/>`;
       out += `<rect x="${i * w}" y="${46 - h}" width="${w - 1.5}" height="${h}" fill="var(--bar)"/>`;
-      if (on && on[i]) out += `<rect x="${i * w}" y="49" width="${w - 1.5}" height="5" fill="var(--butter)"/>`;
+      if (on && on[i]) out += `<rect x="${i * w}" y="49" width="${w - 1.5}" height="5" fill="var(--cobalt)"/>`;
     }
     return out;
   }
@@ -814,7 +833,7 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
         <thead><tr><th>Mutant</th><th>Misreads</th><th>Smoke CI</th><th>ONUS</th></tr></thead><tbody>
         ${ms.map(m => { const ci = String(m.repo_ci || '').toLowerCase(), on = String(m.onus || '').toUpperCase(); return `<tr><td title="${esc(m.description)}">${esc(m.id)}</td><td>${esc(m.misreads)}</td><td><span class="chip">${ci === 'pass' ? 'green ✓' : esc(ci.toUpperCase() || '—')}</span></td><td><span class="chip ${on === 'BLOCK' ? 'bad' : on === 'ASK' ? 'abs' : ''}">${esc(on || '—')}</span></td></tr>`; }).join('')}
         </tbody></table>
-        <div class="rt-sum">Smoke CI caught <b>${d.repo_ci_caught ?? '?'}/${k}</b> · ONUS caught <b style="color:var(--signal)">${d.onus_caught ?? '?'}/${k}</b></div>`;
+        <div class="rt-sum">Smoke CI caught <b>${d.repo_ci_caught ?? '?'}/${k}</b> · ONUS caught <b style="color:var(--green)">${d.onus_caught ?? '?'}/${k}</b></div>`;
       logLine(`<span class="k">gemini</span> ${k} mutants · CI caught <span class="bad">${d.repo_ci_caught}/${k}</span> · ONUS caught <span class="ok">${d.onus_caught}/${k}</span>`);
     } catch (e) {
       $('#redteam').innerHTML = `<div class="empty" style="color:var(--signal)">${esc(e.message)}</div>`;
