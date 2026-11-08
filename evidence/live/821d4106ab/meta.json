@@ -1,0 +1,6 @@
+{
+ "ticket": "BEN-430",
+ "description": "BEN-430: Simplify the income test to use a single income threshold ($100.00) and a single taper rate (0.50) instead of a two-band taper structure. This makes reduction calculations straightforward for caseworkers to perform mentally while maintaining backward compatibility with existing function signatures.",
+ "gemini_ms": 31913,
+ "generated_at": "2026-11-07T16:23:17-0800"
+}
