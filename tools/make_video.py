@@ -16,7 +16,7 @@ SHOTS = [
     (9, "document.querySelector('[data-section=act]')?.scrollIntoView({block:'start'})", "ONUS reads the law first. Meta's Muse read all 828 pages of the Act in one call, every quote verified."),
     (9, "document.querySelector('[data-section=letter]')?.scrollIntoView({block:'start'})", "This pull request would mail Sara a debt of $4,875. The law says zero. Her twin has identical inputs and a different lawful debt."),
     (9, "document.querySelector('[data-section=snap]')?.scrollIntoView({block:'start'})", "SubQ Snap names the clause, catches the undisclosed change, and blocks it, in under half a second."),
-    (9, "document.querySelector('[data-section=cert]')?.scrollIntoView({block:'start'})", "Gemini's red team: repo tests caught zero of three. ONUS caught three of three, and signs it."),
+    (9, "document.querySelector('[data-section=cert]')?.scrollIntoView({block:'start'})", "Gemini proposed the misreadings. Our smoke tests caught zero of three. ONUS caught three of three, and records a hashed certificate."),
     (6, "window.scrollTo(0,0)", "ONUS. The burden of proof is on the code."),
 ]
 
