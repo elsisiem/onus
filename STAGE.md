@@ -4,15 +4,15 @@ Tone: calm and exact. Robodebt hurt real people, and it's the reason this tool e
 
 | t | Screen | Say | Judge |
 |---|---|---|---|
-| 0:00 | Hero: "CI was green. The law wasn't." | "Australia's Robodebt averaged people's yearly income across fortnights and sent **470,000 debts the law didn't allow**. Code like that is about to be written by AI agents. When we asked Claude Code to build it, it refused three times and cited the Federal Court. That's trust. ONUS is the verify." | — |
+| 0:00 | Hero: "CI was green. The law wasn't." | "Australia's Robodebt averaged people's yearly income across fortnights and sent **470,000 debts the law didn't allow**. Code like that is about to be written by AI agents. When we asked Claude Code to build it, in three framings, one run each, it declined all three and cited the Federal Court. That's trust. ONUS is the verify." | — |
 | 0:20 | The Act pane | "ONUS reads the law first. Meta's **Muse Spark read all 828 pages** of the Social Security Act in one call. Every rule comes back with its page and a verbatim quote, and we check each quote against the text. It even caught its own page cite being one off." | — |
 | 0:40 | Income canvas, Sara preset | "Before any AI writes a line, ONUS **seals** tests from the statute. Now: **draw anyone's year.**" | **drags bars / toggles benefit** |
 | 0:55 | Verdict band + letter | "This PR, 'use the ATO annual income feed, no behaviour change', would mail Sara **$4,875**. The law says she owes **$0**." | — |
 | 1:10 | Twin panel | "Here's her twin. Same annual income, same reports. **Identical inputs to the PR.** But the twin earned while on benefit, so the twin lawfully owes $10,725. The PR says $4,875 to both. **No formula that only sees the yearly figure can be right for both.** The only lawful answer is 'cannot determine'. That test needs no expected values." | — |
-| 1:35 | SubQ block | "**SubQ Snap** decides in about 400 milliseconds. Which clause did the diff rewrite? **G7A, fortnight attribution, 0.93.** Did the description disclose the change? **0.01.** Statute defect at 0.86: **blocked.** A diff tells you the outputs differ; Snap tells you what that means and who has to act." | — |
-| 2:00 | Red team | "**Gemini** wrote deliberate misreadings of the Act from the rules alone. It never saw our code. **The repo's own CI caught 0 of 3. ONUS caught 3 of 3**, and Snap named the exact clause each one broke." | **clicks Red-team** |
+| 1:35 | SubQ block | "A failed sealed test blocks, deterministically. **SubQ Snap**, without seeing our answers, names which rule the diff rewrote: **G7A, fortnight attribution.** Did the description disclose the change? **No, 0.03.** Under a second. For the free-area PR it names **G12 at 0.98**. A diff tells you the outputs differ; Snap tells you what that means and who has to act." | — |
+| 2:00 | Red team | "**Gemini** proposed deliberate misreadings of the Act from the rules alone, and we planted them as PRs. **Our smoke CI caught 0 of 3. ONUS caught 3 of 3**, and Snap named the exact clause each one broke." | **clicks Red-team** |
 | 2:20 | Ask the Act | "Ask it anything about the Act." | **types a claim** → Muse returns CONFIRMED / REFUTED / NOT IN EVIDENCE with page + quote (about 6 s) |
-| 2:35 | Certificate + press | "Every decision is signed: the rules, the seal, the result. The burden of proof is on the code." | — |
+| 2:35 | Certificate + press | "Every decision goes into a hashed certificate: the rules, the seal, the result. The burden of proof is on the code." | — |
 
 **If Muse is slow:** show the cached answer and say so. Never debug on stage.
 

@@ -37,15 +37,38 @@ def run(body):
     try:
         snap = models.snap_decide(RULES, pr, divergence)
     except Exception as e:  # never fake a decision
-        snap = {"error": f"SubQ unavailable: {e}", "route": "ASK", "clauses": [], "triage": {}, "latency_ms": None}
-    route = snap["route"]
-    top = max(snap.get("clauses") or [{"id": pr["misreads"] or "-", "p": 0}], key=lambda c: c["p"])
-    rule = next((r for r in RULES if r["id"] == (pr["misreads"] or top["id"])), None)
-    headline = {"BLOCK": f"BLOCKED — {pr['misreads'] or top['id']}", "PASS": "PASS — matches the Act", "ASK": "ASK A LAWYER"}[route]
-    out = {"lawful": truth, "pr": {"id": key, **got, "misreads": pr["misreads"], "description": pr["description"], "title": pr["title"]},
+        snap = {"error": f"SubQ unavailable: {e}", "clauses": [], "triage": {}, "latency_ms": None}
+    # Deterministic routing: a failed sealed test BLOCKs. Snap can only add a flag or escalate a clean-suite case to a human.
+    tri = snap.get("triage") or {}
+    failed = sealed["failed"]
+    flag = None
+    if failed:
+        route = "BLOCK"
+        if tri.get("choice") in ("statute_ambiguity", "oracle_doubt") and tri.get("confidence", 0) >= 0.7:
+            flag = "ASK A LAWYER" if tri["choice"] == "statute_ambiguity" else "ORACLE DOUBT"
+    elif tri.get("choice") == "statute_defect" or got["status"] != truth["status"] and got["status"] != "CANNOT_DETERMINE":
+        route = "ASK"
+    else:
+        route = "PASS"
+    snap["route"] = route
+    rule, named_by = None, None
+    if failed:  # failed sealed tests decide BLOCK; Snap's BLIND clause map names which failed rule the diff rewrote
+        cp = {c["id"]: c["p"] for c in snap.get("clauses", [])}
+        cands = []
+        for f in failed:
+            for rid in f["rule"].split("/"):
+                rid = rid if rid.startswith("1068") or rid.startswith("10") else "1068-" + rid
+                cands.append((cp.get(rid, 0.0), rid, f["id"]))
+        p, rid, tid = max(cands, key=lambda x: x[0])
+        rule = next((r for r in RULES if r["id"] == rid), None)
+        named_by = {"failing_test": tid, "blind_clause_p": p}
+    headline = {"BLOCK": f"BLOCKED — {rule['id'] if rule else failed[0]['rule']}" if failed else "", "PASS": "PASS — matches the Act",
+                "ASK": "ASK A HUMAN"}[route]
+    out = {"lawful": truth, "pr": {"id": key, **got, "description": pr["description"], "title": pr["title"]},
            "letter": {"would_send": got["status"] == "OK" and got["debt"] > 0, "amount": got["debt"], "lawful_amount": truth["debt"]},
            "twin": twin_out, "sealed": sealed, "snap": snap,
-           "verdict": {"route": route, "headline": headline, "clause": rule["id"] if rule else None, "page": rule["page"] if rule else None}}
+           "verdict": {"route": route, "headline": headline, "flag": flag, "clause": rule["id"] if rule else None, "page": rule["page"] if rule else None,
+                       "failing_test": named_by["failing_test"] if named_by else None, "named_by": named_by}}
     LAST.clear(); LAST.update({"request": body, "result": out})
     return out
 

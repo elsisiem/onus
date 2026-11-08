@@ -1,6 +1,15 @@
 """Statute oracle, observables, the twin, the sealed suite and repo CI."""
 import hashlib, json, os, datetime
-from benefits.recalc import reduction  # constants are the Act's own (G12, G15, G16)
+# Independent of the system under test: constants come from the Act, each with its rule and page.
+FREE_AREA = 100.0    # s1068-G12, Act PDF p.65: "ordinary income free area is $100"
+LOWER_BAND = 150.0   # s1068-G15, p.65: 50% of the excess "that does not exceed $150"
+LOWER_RATE = 0.5     # s1068-G15, p.65
+UPPER_RATE = 0.6     # s1068-G16, p.66: 60% of the excess "that exceeds $150"
+
+
+def reduction(income):
+    excess = max(0.0, income - FREE_AREA)
+    return round(min(excess, LOWER_BAND) * LOWER_RATE + max(0.0, excess - LOWER_BAND) * UPPER_RATE, 2)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SEAL_PATH = os.path.join(ROOT, "law", "sealed_suite.json")

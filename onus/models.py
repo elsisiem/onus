@@ -38,12 +38,13 @@ SEVERITY = ["cosmetic or none", "minor (under $10 per person)", "material (the l
 
 
 def snap_decide(rules, pr, divergence):
-    """One sub-second Snap request: clause map + disclosure + triage + severity."""
-    state = {
-        "statute_rules": [{"id": r["id"], "page": r["page"], "quote": r["quote"]} for r in rules],
-        "pull_request": {"title": pr["title"], "description": pr["description"], "diff": pr["diff"]},
-        "observed": divergence,
-    }
+    """Two parallel sub-second Snap requests.
+    A (blind): statute rules + PR title/description/diff ONLY -> clause map + disclosure. No oracle outputs.
+    B (disclosed inputs): rules + PR + the sealed-suite outcome summary -> triage + severity."""
+    import concurrent.futures as cf
+    rules_state = [{"id": r["id"], "page": r["page"], "quote": r["quote"]} for r in rules]
+    pr_state = {"title": pr["title"], "description": pr["description"], "diff": pr["diff"]}
+    state = {"statute_rules": rules_state, "pull_request": pr_state}
     q = {f"clause_{r['id'].replace('-', '_')}": {
         "type": "noul", "instructions": f"Does the diff itself rewrite the logic that implements rule {r['id']} ({r.get('role','')})? "
                                          "Answer about the changed lines only, not about downstream effects on other rules' inputs.",
@@ -51,28 +52,26 @@ def snap_decide(rules, pr, divergence):
                      "false": "The changed lines do not implement this rule; at most its inputs change"}} for r in rules}
     q["disclosure"] = {"type": "noul", "instructions": "Does the PR description truthfully disclose the behaviour change the diff makes?",
                        "criteria": {"true": "The description states the behaviour change", "false": "The description says there is no behaviour change, or omits it"}}
-    q["triage"] = {"type": "choice", "instructions": "Given the statute, the diff and the observed divergence, what is this?", "criteria": TRIAGE}
-    q["severity"] = {"type": "score", "instructions": "How severe is the impact on a recipient?", "criteria": SEVERITY}
-    resp, ms = _post("https://api.subq.ai/v1/systemone", {"Authorization": f"Bearer {ENV['SUBQ_API_KEY']}"},
-                     {"model": "subq-snap-1.1", "state": state, "questions": q}, timeout=30)
-    a = resp["answers"]
+    qb = {"triage": {"type": "choice", "instructions": "Given the statute, the diff and the sealed-suite outcome, what is this?", "criteria": TRIAGE},
+          "severity": {"type": "score", "instructions": "How severe is the impact on a recipient?", "criteria": SEVERITY}}
+    state_b = {**state, "sealed_suite_outcome": {"failed_families": divergence.get("sealed_failure_families", []),
+                                                 "outputs_differ": divergence.get("diverges", False)}}
+    hdr = {"Authorization": f"Bearer {ENV['SUBQ_API_KEY']}"}
+    with cf.ThreadPoolExecutor(2) as ex:
+        fa = ex.submit(_post, "https://api.subq.ai/v1/systemone", hdr, {"model": "subq-snap-1.1", "state": state, "questions": q}, 30)
+        fb = ex.submit(_post, "https://api.subq.ai/v1/systemone", hdr, {"model": "subq-snap-1.1", "state": state_b, "questions": qb}, 30)
+        (ra, ma), (rb, mb) = fa.result(), fb.result()
+    a, b = ra["answers"], rb["answers"]
     clauses = [{"id": r["id"], "p": round(a[f"clause_{r['id'].replace('-', '_')}"]["noul"], 3)} for r in rules]
-    tri = a["triage"]
-    sev = a["severity"]
-    diverges = divergence.get("diverges", False)
-    if not diverges and tri["choice"] in ("no_divergence", "declared_policy_change"):
-        route = "PASS"
-    elif tri["choice"] == "statute_defect" and tri["confidence"] >= 0.7:
-        route = "BLOCK"
-    elif tri["choice"] in ("statute_ambiguity", "oracle_doubt") or tri["confidence"] < 0.7:
-        route = "ASK"
-    else:
-        route = "BLOCK" if diverges else "PASS"
-    return {"latency_ms": ms, "input_tokens": resp.get("usage", {}).get("input_tokens"), "clauses": clauses,
-            "disclosure_p": round(a["disclosure"]["noul"], 3),
+    tri, sev = b["triage"], b["severity"]
+    return {"latency_ms": max(ma, mb), "latency_blind_ms": ma, "latency_triage_ms": mb,
+            "input_tokens": (ra.get("usage", {}).get("input_tokens") or 0) + (rb.get("usage", {}).get("input_tokens") or 0),
+            "clauses": clauses, "disclosure_p": round(a["disclosure"]["noul"], 3),
+            "inputs": {"clause_map_and_disclosure": "statute rules + PR title/description/diff only (no oracle outputs)",
+                       "triage_and_severity": "the above + sealed-suite failed families + whether outputs differ"},
             "triage": {"choice": tri["choice"], "probabilities": {k: round(v, 3) for k, v in tri["probabilities"].items()},
                        "confidence": round(tri["confidence"], 3)},
-            "severity": round(sev["score"], 2), "route": route}
+            "severity": round(sev["score"], 2)}
 
 
 def muse_ask(claim, rules, pages):

@@ -417,12 +417,12 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
       <div class="pane-b">
         <div class="receipt" id="sealed">Sealed suite: <span class="muted">waiting for a run</span></div>
         <div class="sub-h"><span class="label">Red team · Gemini, rules only</span><button class="btn sm" id="rtBtn2">Run red team</button></div>
-        <div id="redteam"><div class="empty">Gemini wrote deliberate misreadings of the Act. Press Red-team to run them through repo CI and through ONUS.</div></div>
+        <div id="redteam"><div class="empty">Gemini proposed misreadings of the Act from the rules alone; we ported them as PLANTED PRs. Press Red-team to run them through smoke CI (3 tests we wrote) and through ONUS.</div></div>
         <div class="cert" id="cert">
           <div>
             <div class="label">Certificate of gate</div>
             <h4 id="certTitle">Not yet issued</h4>
-            <p id="certText">Run the gate, then issue a signed statement of what ONUS saw.</p>
+            <p id="certText">Run the gate, then issue a hashed (sha256) statement of what ONUS saw.</p>
             <p class="mono" style="font-size:12px">Muse: the Act · Gemini: rules only, never the code · Judge: SubQ Snap</p>
           </div>
           <svg class="seal" id="seal" viewBox="0 0 100 100" aria-hidden="true"><use href="#hallmark"/></svg>
@@ -811,10 +811,10 @@ footer{border-top:1px solid var(--line); padding:18px 0 40px; color:var(--ink-3)
       const d = await api('POST', '/api/redteam', {});
       const ms = d.mutants || [], k = d.k ?? ms.length;
       $('#redteam').innerHTML = `<table class="rt"><colgroup><col style="width:40%"><col style="width:22%"><col style="width:19%"><col style="width:19%"></colgroup>
-        <thead><tr><th>Mutant</th><th>Misreads</th><th>Repo CI</th><th>ONUS</th></tr></thead><tbody>
+        <thead><tr><th>Mutant</th><th>Misreads</th><th>Smoke CI</th><th>ONUS</th></tr></thead><tbody>
         ${ms.map(m => { const ci = String(m.repo_ci || '').toLowerCase(), on = String(m.onus || '').toUpperCase(); return `<tr><td title="${esc(m.description)}">${esc(m.id)}</td><td>${esc(m.misreads)}</td><td><span class="chip">${ci === 'pass' ? 'green ✓' : esc(ci.toUpperCase() || '—')}</span></td><td><span class="chip ${on === 'BLOCK' ? 'bad' : on === 'ASK' ? 'abs' : ''}">${esc(on || '—')}</span></td></tr>`; }).join('')}
         </tbody></table>
-        <div class="rt-sum">Repo CI caught <b>${d.repo_ci_caught ?? '?'}/${k}</b> · ONUS caught <b style="color:var(--signal)">${d.onus_caught ?? '?'}/${k}</b></div>`;
+        <div class="rt-sum">Smoke CI caught <b>${d.repo_ci_caught ?? '?'}/${k}</b> · ONUS caught <b style="color:var(--signal)">${d.onus_caught ?? '?'}/${k}</b></div>`;
       logLine(`<span class="k">gemini</span> ${k} mutants · CI caught <span class="bad">${d.repo_ci_caught}/${k}</span> · ONUS caught <span class="ok">${d.onus_caught}/${k}</span>`);
     } catch (e) {
       $('#redteam').innerHTML = `<div class="empty" style="color:var(--signal)">${esc(e.message)}</div>`;
