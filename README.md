@@ -1,5 +1,7 @@
 # ONUS: the burden of proof is on the code
 
+A merge gate for AI-written code that implements law. Its tests are sealed from page-cited quotes of the statute before any PR exists, and every decision gets a signed, timestamped certificate. **Live:** [onus-registry.fly.dev](https://onus-registry.fly.dev)
+
 **Repo:** https://github.com/elsisiem/onus · **Demo video:** `docs/onus_demo_60s.mp4`
 
 ## Quick start (for a human coder)
@@ -18,7 +20,7 @@ Layout: `onus/law.py` (Act rules + constants parsed from Muse's verified quotes)
 |---|---|---|
 | **Meta Muse Spark** | Reads the 828-page Act in one call and returns each rule with page and verbatim quote. The gate's constants are **parsed from those quotes** | No verified rules, so `law.constants()` refuses and the gate cannot run |
 | **SubQ Snap** | Blind clause map: names which rule a diff rewrote, and whether the PR description hid the change, in under a second. Triage can flag ASK-A-LAWYER | Tests say *that* something failed, not *which law* or *who must act*. A disclosed policy change and a silent defect look identical |
-| **Google Gemini** | Independent red team: writes real PRs from tickets **plus its own unit tests**, which run as the implementer's CI | The gate is only tested against bugs we imagined ourselves |
+| **Google Gemini** | Independent red team: writes real PRs from tickets **plus its own unit tests**, which run as the implementer's CI | The gate is only tested against bugs I imagined myself |
 
 **CI was green. The law wasn’t.** ONUS is a merge gate for AI-written changes to code that implements law. Its only source of truth is the statute.
 
@@ -29,10 +31,10 @@ From 2015 to 2019, Australia’s **Robodebt** scheme averaged a person’s annua
 
 Code that implements law is about to be written by agents. **The tests an agent writes share the agent’s misunderstanding, so CI stays green.**
 
-We asked Claude Code to implement the Robodebt-style ticket in three different framings, one run each. It **declined 3 of 3, citing the Federal Court** (transcripts in `law/claude_refusal_run*.txt`). That’s trust. ONUS is the verify, for the rules that never got a Royal Commission.
+I asked Claude Code to implement the Robodebt-style ticket in three different framings, one run each. It **declined 3 of 3, citing the Federal Court** (transcripts in `law/claude_refusal_run*.txt`). That’s trust. ONUS is the verify, for the rules that never got a Royal Commission.
 
 ## What it does
-1. **Reads the law.** Meta **Muse Spark** read the full text of *Social Security Act 1991, vol. 3* (828 pages, compilation C2016C00230) in **one call** (353,116 prompt tokens, 30.9 s). It located and quoted the provisions we asked for, each with its PDF page and a verbatim quote.
+1. **Reads the law.** Meta **Muse Spark** read the full text of *Social Security Act 1991, vol. 3* (828 pages, compilation C2016C00230) in **one call** (353,116 prompt tokens, 30.9 s). It located and quoted the provisions I asked for, each with its PDF page and a verbatim quote.
    - ONUS then **checks every quote against the Act’s text** (see `onus/law.py`): 6/6 verified. It auto-corrected s1223(1) from p.645 to **p.644**.
 2. **Seals its tests before any PR exists.** The suite has three kinds of test, all derived from the statute:
    - boundary cases for 1068-G12, G15 and G16;
@@ -44,11 +46,11 @@ We asked Claude Code to implement the Robodebt-style ticket in three different f
    - **Triage request** (adds only the sealed-suite failed families): statute defect / disclosed policy change / oracle doubt / statute ambiguity / no divergence, plus a severity score.
 
    **Routing is deterministic:** any failed sealed test means **BLOCK**, and the blind clause map names which failed rule the diff rewrote. Snap can only add an ASK-A-LAWYER or ORACLE-DOUBT flag (confidence ≥ 0.7), or send a clean-suite divergence to a human.
-5. **Red team.** Deliberate misreadings of the Act: averaging (G7A), free-area conflation (G12), rate cliff (G15/G16). **Gemini Flash proposed them** from the rules alone (`law/mutants_gemini.json`). **We ported them** as PLANTED PRs in `prs/`.
-   - **Smoke CI (3 tests we wrote, standing in for repo CI) caught 0/3. ONUS caught 3/3.**
+5. **Red team.** Deliberate misreadings of the Act: averaging (G7A), free-area conflation (G12), rate cliff (G15/G16). **Gemini Flash proposed them** from the rules alone (`law/mutants_gemini.json`). **I ported them** as PLANTED PRs in `prs/`.
+   - **Smoke CI (3 tests I wrote, standing in for repo CI) caught 0/3. ONUS caught 3/3.**
 6. **Hashes** (sha256, not yet signed) an in-toto Statement (`predicateType: https://onus.dev/statute-conformance/v0.1`) with the rules, the seal, the decisions and the result.
 
-## Measured on our keys today
+## Measured on my keys
 | | Result |
 |---|---|
 | **Muse Spark**, full Act | 353K tokens in one call, 30.9 s; 6/6 quotes verified against the text |
@@ -70,7 +72,7 @@ We asked Claude Code to implement the Robodebt-style ticket in three different f
 
 ## Honesty
 - **Real:** the statute is real (CC BY 4.0, legislation.gov.au).
-- **Synthetic:** the people, the PLANTED red-team PRs (Gemini proposed, we ported), and the smoke CI (we wrote it).
+- **Synthetic:** the people, the PLANTED red-team PRs (Gemini proposed, I ported), and the smoke CI (I wrote it).
 - **Timing:** the sealed suite's timestamp is in `law/sealed_suite.json`. The PRs were authored the same afternoon; see git history for order.
 - **Independence:** `onus/oracle.py` hardcodes the Act's constants with rule ids and pages and imports nothing from the code under test.
 - **Scope:** the calculator is an illustrative single-adult Newstart income test with no partner, assets or remote-area rules.
